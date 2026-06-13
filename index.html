@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="/quiz-hg-burkina/manifest.json">
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"/>
 <title>Questionnaire Histoire-Géographie – Terminale A</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
@@ -18,7 +18,8 @@
     --gris-moyen: #E2E4E8;
     --gris-texte: #5A5F72;
     --ombre: 0 4px 24px rgba(0,0,0,0.10);
-  }
+  }html, body { background: var(--vert); }
+.header-top-bands { padding-top: env(safe-area-inset-top, 0px); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -27,7 +28,53 @@
     background: var(--gris-clair);
     color: var(--noir);
     min-height: 100vh;
+  }<script>
+(function() {
+  let audioCtx;
+  function getCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
   }
+  function tone(freq, duration, type, vol) {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol || 0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + duration);
+  }
+  function playClick() { tone(700, 0.06, 'square', 0.08); }
+  function playCorrect() { tone(523, 0.12); setTimeout(()=>tone(784, 0.18), 100); }
+  function playWrong() { tone(200, 0.25, 'sawtooth', 0.12); }
+
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.option-item, .vf-btn, .mode-btn, .btn-start, .btn-valider, .btn-suivant, .btn-passer, .btn-home-quiz, .btn-rejouer, .btn-restart, .lecon-check')) {
+      playClick();
+    }
+  }, true);
+
+  function watchEl(el) {
+    new MutationObserver(() => {
+      if ((el.classList.contains('correct') || el.classList.contains('correct-vrai') || el.classList.contains('correct-faux')) && !el.dataset.s1) {
+        playCorrect(); el.dataset.s1 = '1';
+      }
+      if ((el.classList.contains('wrong') || el.classList.contains('wrong-btn')) && !el.dataset.s2) {
+        playWrong(); el.dataset.s2 = '1';
+      }
+    }).observe(el, { attributes: true });
+  }
+
+  new MutationObserver(() => {
+    document.querySelectorAll('.option-item:not([data-watched]), .vf-btn:not([data-watched])').forEach(el => {
+      el.dataset.watched = '1';
+      watchEl(el);
+    });
+  }).observe(document.body, { childList: true, subtree: true });
+})();
+</script>
 
   /* ======== HEADER ======== */
   .header { background: var(--vert); color: var(--blanc); padding: 0; }
