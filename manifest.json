@@ -7,8 +7,8 @@
   "theme_color": "#1a7a3c",
   "icons": [
     {
-      "src": "/quiz-hg-burkina/icon-192.png",
-      "sizes": "192x192",
+      "src": "/quiz-hg-burkina/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ],
