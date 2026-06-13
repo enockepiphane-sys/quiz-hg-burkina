@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Questionnaire Histoire-Géographie – Terminale A</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --rouge: #EF2B2D;
+    --vert: #009A44;
+    --or: #FFD700;
+    --noir: #1A1A1A;
+    --blanc: #FFFFFF;
+    --gris-clair: #F5F6F8;
+    --gris-moyen: #E2E4E8;
+    --gris-texte: #5A5F72;
+    --ombre: 0 4px 24px rgba(0,0,0,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gris-clair);
+    color: var(--noir);
+    min-height: 100vh;
+  }
+
+  /* ======== HEADER ======== */
+  .header { background: var(--vert); color: var(--blanc); padding: 0; }
+  .header-top-bands { display: flex; height: 8px; }
+  .band-rouge-top { background: var(--rouge); flex: 1; }
+  .band-or-top    { background: var(--or);    flex: 1; }
+  .band-vert-top  { background: var(--vert);  flex: 1; }
+  .header-main {
+    background: linear-gradient(160deg, #1a5c30 0%, var(--vert) 60%, #007a35 100%);
+    padding: 28px 20px 32px;
+  }
+  .header-main-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; max-width: 680px; margin: 0 auto;
+  }
+  .header-texts-center { flex: 1; text-align: center; }
+  .header-flag-right { flex-shrink: 0; }
+  .flag-bf-header {
+    width: 66px; height: 44px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius: 4px; display: block;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+  }
+  .header-country-line {
+    font-size: 0.70rem; font-weight: 700; letter-spacing: 0.16em;
+    color: var(--or); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .header-title {
+    font-family: 'EB Garamond', serif; font-size: 1.9rem; font-weight: 700;
+    color: var(--blanc); line-height: 1.2; margin-bottom: 12px;
+  }
+  .header-subtitle { font-size: 0.80rem; color: rgba(255,255,255,0.85); line-height: 1.7; }
+  .header-subtitle .sep { margin: 0 5px; opacity: 0.6; }
+  /* ======== BARRE OR ======== */
+  .gold-bar {
+    background: var(--or); padding: 8px 16px; text-align: center;
+    font-size: 0.70rem; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--noir); text-transform: uppercase;
+  }
+  /* masquer anciens éléments */
+  .header-band, .sub-header, .flag-wrap { display: none; }
+
+  /* ======== MENU ACCUEIL ======== */
+  #screen-home {
+    max-width: 680px; margin: 0 auto;
+    padding: 20px 16px; background: #f5efe6;
+    min-height: calc(100vh - 200px);
+  }
+  /* Stat cards */
+  .stat-home-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .stat-home-card {
+    background: var(--blanc); border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 18px 22px;
+    border-left: 5px solid var(--vert); display: flex;
+    align-items: center; justify-content: space-between;
+  }
+  .stat-home-card .stat-val {
+    font-size: 2rem; font-weight: 800; color: var(--vert);
+    font-family: 'EB Garamond', serif; line-height: 1;
+  }
+  .stat-home-card .stat-lbl { font-size: 0.85rem; color: var(--gris-texte); margin-top: 2px; }
+  .timer-display {
+    background: #fff0f0; border: 2px solid var(--rouge); border-radius: 10px;
+    padding: 7px 14px; font-size: 1.2rem; font-weight: 800; color: var(--rouge);
+    font-family: 'Inter', monospace; letter-spacing: 0.08em; min-width: 82px; text-align: center;
+  }
+  .card {
+    background: var(--blanc);
+    border-radius: 12px;
+    box-shadow: var(--ombre);
+    padding: 28px 28px;
+    margin-bottom: 20px;
+  }
+  .card h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.25rem;
+    color: var(--vert);
+    margin-bottom: 12px;
+    border-left: 4px solid var(--vert);
+    padding-left: 10px;
+  }
+  .card p {
+    font-size: 0.88rem;
+    color: var(--gris-texte);
+    line-height: 1.6;
+  }
+  .mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .mode-btn {
+    border: 2px solid var(--gris-moyen);
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 18px 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    font-family: 'Inter', sans-serif;
+  }
+  .mode-btn:hover { border-color: var(--vert); background: #f0faf4; }
+  .mode-btn.selected { border-color: var(--vert); background: #e6f7ee; box-shadow: 0 0 0 2px var(--vert); }
+  .mode-btn .icon { font-size: 2rem; display: block; margin-bottom: 6px; }
+  .mode-btn .label { font-size: 0.88rem; font-weight: 600; color: var(--noir); }
+  .mode-btn .sub { font-size: 0.76rem; color: var(--gris-texte); margin-top: 2px; }
+
+  .lecon-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .lecon-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gris-clair);
+    border-radius: 7px;
+    padding: 8px 12px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.84rem;
+    font-weight: 500;
+    transition: background 0.15s;
+    border: 1.5px solid transparent;
+  }
+  .lecon-check:hover { background: #e6f7ee; border-color: var(--vert); }
+  .lecon-check input { accent-color: var(--vert); width: 15px; height: 15px; }
+
+  .count-row {
+    display: flex; gap: 12px; align-items: center; margin-top: 16px; flex-wrap: wrap;
+  }
+  .count-row label { font-size: 0.84rem; font-weight: 600; color: var(--gris-texte); }
+  .count-input {
+    width: 70px; padding: 6px 10px; border: 1.5px solid var(--gris-moyen);
+    border-radius: 7px; font-size: 0.88rem; font-family: 'Inter', sans-serif;
+  }
+
+  .btn-start {
+    width: 100%; margin-top: 22px; padding: 16px;
+    background: linear-gradient(135deg, #1a5c30, var(--vert));
+    color: var(--blanc); border: none; border-radius: 12px;
+    font-size: 1.05rem; font-weight: 700; cursor: pointer;
+    font-family: 'Inter', sans-serif; box-shadow: 0 6px 20px rgba(0,154,68,0.40);
+    transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-start:hover { background: linear-gradient(135deg, #0f3d1e, #007a35); transform: translateY(-1px); }
+  /* Bouton retour accueil dans le quiz */
+  .btn-home-quiz {
+    background: #f5f6f8; color: var(--noir); border: 2px solid var(--gris-moyen);
+    flex: 0 0 46px; font-size: 1.1rem;
+  }
+  .btn-home-quiz:hover { background: #fde8e8; border-color: var(--rouge); }
+  /* Boutons résultats */
+  .btn-restart {
+    width: 100%; padding: 13px; background: linear-gradient(135deg, #b36200, #f97316);
+    color: var(--blanc); border: none; border-radius: 10px; font-size: 0.95rem;
+    font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 14px rgba(249,115,22,0.3); margin-bottom: 12px; transition: all 0.18s;
+  }
+  .btn-restart:hover { background: linear-gradient(135deg, #8a4a00, #e06010); transform: translateY(-1px); }
+  .btn-copy-perf {
+    width: 100%; padding: 13px; background: linear-gradient(135deg, #1a3a5c, #2563a8);
+    color: var(--blanc); border: none; border-radius: 10px; font-size: 0.95rem;
+    font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 14px rgba(37,99,168,0.3); margin-bottom: 14px; transition: all 0.18s;
+  }
+  .btn-copy-perf:hover { background: linear-gradient(135deg, #122840, #1a4f8a); transform: translateY(-1px); }
+  .btn-copy-perf.copied { background: linear-gradient(135deg, var(--vert), #007a35); }
+  .app-date { text-align: center; font-size: 0.74rem; color: #aaa; padding-bottom: 18px; letter-spacing: 0.06em; }
+
+  /* ======== QUIZ SCREEN ======== */
+  #screen-quiz { display: none; max-width: 740px; margin: 24px auto; padding: 0 16px; }
+
+  .progress-bar-wrap {
+    background: var(--gris-moyen);
+    border-radius: 99px;
+    height: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rouge), var(--or), var(--vert));
+    border-radius: 99px;
+    transition: width 0.3s;
+  }
+  .quiz-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.80rem;
+    color: var(--gris-texte);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .question-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    box-shadow: var(--ombre);
+    padding: 26px 26px 20px;
+    margin-bottom: 18px;
+    border-top: 4px solid var(--vert);
+    transition: border-top-color 0.2s;
+  }
+  .question-card.type-vf { border-top-color: var(--rouge); }
+
+  .q-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+  }
+  .q-badge.qcm { background: #e6f7ee; color: var(--vert); }
+  .q-badge.vf  { background: #fde8e8; color: var(--rouge); }
+  .q-badge .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .q-badge.qcm .dot { background: var(--vert); }
+  .q-badge.vf  .dot { background: var(--rouge); }
+
+  .lecon-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--gris-texte);
+    background: var(--gris-clair);
+    padding: 2px 8px;
+    border-radius: 99px;
+    float: right;
+    margin-left: 8px;
+  }
+
+  .question-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.13rem;
+    line-height: 1.65;
+    color: var(--noir);
+    margin-bottom: 18px;
+    clear: both;
+  }
+
+  .options-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .option-item {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 11px 14px;
+    border: 1.5px solid var(--gris-moyen);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.16s;
+    font-size: 0.90rem;
+    line-height: 1.45;
+  }
+  .option-item:hover { border-color: var(--vert); background: #f4fbf7; }
+  .option-item.selected { border-color: var(--vert); background: #e6f7ee; }
+  .option-item.correct  { border-color: #00b34a; background: #d4f5e2; font-weight: 600; }
+  .option-item.wrong    { border-color: var(--rouge); background: #fde8e8; }
+  .option-item.reveal   { border-color: #00b34a; background: #d4f5e2; }
+
+  .opt-letter {
+    min-width: 24px; height: 24px;
+    background: var(--gris-moyen);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.78rem;
+    flex-shrink: 0;
+    transition: background 0.16s, color 0.16s;
+  }
+  .option-item.selected .opt-letter { background: var(--vert); color: var(--blanc); }
+  .option-item.correct  .opt-letter { background: #00b34a; color: var(--blanc); }
+  .option-item.wrong    .opt-letter { background: var(--rouge); color: var(--blanc); }
+  .option-item.reveal   .opt-letter { background: #00b34a; color: var(--blanc); }
+
+  .vf-buttons { display: flex; gap: 12px; margin-top: 6px; }
+  .vf-btn {
+    flex: 1; padding: 13px; border-radius: 9px;
+    border: 2px solid var(--gris-moyen);
+    background: var(--blanc); cursor: pointer;
+    font-size: 1rem; font-weight: 700; font-family: 'Inter', sans-serif;
+    transition: all 0.16s;
+  }
+  .vf-btn.vrai:hover { border-color: var(--vert); background: #e6f7ee; color: var(--vert); }
+  .vf-btn.faux:hover { border-color: var(--rouge); background: #fde8e8; color: var(--rouge); }
+  .vf-btn.selected-vrai { border-color: var(--vert); background: #e6f7ee; color: var(--vert); }
+  .vf-btn.selected-faux { border-color: var(--rouge); background: #fde8e8; color: var(--rouge); }
+  .vf-btn.correct-vrai  { border-color: #00b34a; background: #d4f5e2; color: #006e30; }
+  .vf-btn.correct-faux  { border-color: #00b34a; background: #d4f5e2; color: #006e30; }
+  .vf-btn.wrong-btn     { border-color: var(--rouge); background: #fde8e8; color: var(--rouge); }
+
+  .feedback-box {
+    margin-top: 14px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.ok { background: #e6f7ee; color: #006e30; border-left: 4px solid var(--vert); }
+  .feedback-box.ko { background: #fde8e8; color: #b52020; border-left: 4px solid var(--rouge); }
+
+  .nav-btns { display: flex; gap: 12px; margin-top: 20px; }
+  .btn-nav {
+    flex: 1; padding: 13px; border-radius: 10px; border: none; cursor: pointer;
+    font-size: 0.92rem; font-weight: 700; font-family: 'Inter', sans-serif;
+    transition: all 0.16s;
+  }
+  .btn-valider { background: var(--vert); color: var(--blanc); }
+  .btn-valider:hover { background: #007a35; }
+  .btn-suivant { background: var(--noir); color: var(--blanc); display: none; }
+  .btn-suivant:hover { background: #333; }
+  .btn-passer  { background: var(--gris-moyen); color: var(--gris-texte); }
+  .btn-passer:hover { background: #d0d3db; }
+
+  /* ======== RESULTATS ======== */
+  #screen-result { display: none; max-width: 680px; margin: 32px auto; padding: 0 16px; }
+  .result-hero {
+    background: linear-gradient(135deg, var(--noir) 0%, #2d2d2d 100%);
+    border-radius: 14px;
+    padding: 36px 28px;
+    color: var(--blanc);
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--rouge), var(--or), var(--vert));
+  }
+  .score-big {
+    font-family: 'EB Garamond', serif;
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: var(--or);
+    line-height: 1;
+  }
+  .score-label { font-size: 0.85rem; opacity: 0.75; margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .score-mention {
+    font-size: 1.25rem; font-weight: 700; margin-top: 14px;
+    padding: 6px 20px; border-radius: 99px; display: inline-block;
+  }
+  .mention-excellent { background: var(--or); color: var(--noir); }
+  .mention-bien { background: var(--vert); color: var(--blanc); }
+  .mention-passable { background: #f97316; color: var(--blanc); }
+  .mention-insuffisant { background: var(--rouge); color: var(--blanc); }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--blanc);
+    border-radius: 12px;
+    box-shadow: var(--ombre);
+    padding: 18px 14px;
+    text-align: center;
+  }
+  .stat-card .val { font-size: 2rem; font-weight: 800; color: var(--vert); font-family: 'EB Garamond', serif; }
+  .stat-card .lbl { font-size: 0.76rem; color: var(--gris-texte); margin-top: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-card .val.rouge { color: var(--rouge); }
+
+  .btn-rejouer {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, var(--rouge), #c0191b);
+    color: var(--blanc); border: none; border-radius: 10px;
+    font-size: 1.05rem; font-weight: 700; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 16px rgba(239,43,45,0.3);
+    margin-bottom: 12px;
+    transition: all 0.18s;
+  }
+  .btn-rejouer:hover { background: linear-gradient(135deg, #c0191b, var(--rouge)); transform: translateY(-1px); }
+
+  .signature {
+    text-align: center;
+    font-size: 0.76rem;
+    color: var(--gris-texte);
+    padding: 18px;
+    border-top: 1.5px solid var(--gris-moyen);
+    margin-top: 10px;
+    font-style: italic;
+    letter-spacing: 0.03em;
+  }
+  .signature strong { color: var(--vert); font-style: normal; }
+
+  @media (max-width: 520px) {
+    .mode-grid, .lecon-grid, .stats-grid { grid-template-columns: 1fr; }
+    .header-country { font-size: 1.1rem; }
+    .score-big { font-size: 3.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ HEADER -->
+<header class="header">
+  <div class="header-top-bands">
+    <div class="band-rouge-top"></div>
+    <div class="band-or-top"></div>
+    <div class="band-vert-top"></div>
+  </div>
+  <div class="header-main">
+    <div class="header-main-inner">
+      <div class="header-texts-center">
+        <div class="header-country-line">BURKINA FASO — ÉDUCATION NATIONALE</div>
+        <div class="header-title">Questionnaire d'Histoire-Géographie Terminale A</div>
+        <div class="header-subtitle">
+          126 QCM<span class="sep">·</span>42 Vrai ou Faux<span class="sep">·</span>168 questions au total<span class="sep">·</span>Mélange aléatoire
+        </div>
+      </div>
+      <div class="header-flag-right">
+        <svg class="flag-bf-header" viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="72" height="24" fill="#EF2B2D"/>
+          <rect y="24" width="72" height="24" fill="#009A44"/>
+          <polygon points="36,16 37.9,22.2 44.4,22.2 39.2,26 41.1,32.2 36,28.4 30.9,32.2 32.8,26 27.6,22.2 34.1,22.2" fill="#FFD700"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="gold-bar">© PAR SAOUADOGO W E EPIPHANE — TOUS DROITS RÉSERVÉS</div>
+
+<!-- ============================================================ ÉCRAN ACCUEIL -->
+<div id="screen-home">
+  <div class="stat-home-grid">
+    <div class="stat-home-card">
+      <div><div class="stat-val">168</div><div class="stat-lbl">Questions totales</div></div>
+    </div>
+    <div class="stat-home-card">
+      <div><div class="stat-val">0</div><div class="stat-lbl">Score actuel</div></div>
+    </div>
+    <div class="stat-home-card">
+      <div><div class="stat-val">0</div><div class="stat-lbl">Répondues</div></div>
+      <div class="timer-display" id="home-timer">00:00</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Mode de jeu</h2>
+    <p>Sélectionne un mode d'entraînement avant de commencer.</p>
+    <div class="mode-grid">
+      <div class="mode-btn selected" data-mode="mixte" onclick="selectMode(this)">
+        <span class="icon">⚡</span>
+        <span class="label">Mixte (tout)</span>
+        <span class="sub">QCM + Vrai/Faux mélangés</span>
+      </div>
+      <div class="mode-btn" data-mode="qcm" onclick="selectMode(this)">
+        <span class="icon">📋</span>
+        <span class="label">QCM seulement</span>
+        <span class="sub">4 choix de réponse</span>
+      </div>
+      <div class="mode-btn" data-mode="vf" onclick="selectMode(this)">
+        <span class="icon">✅</span>
+        <span class="label">Vrai / Faux</span>
+        <span class="sub">Affirmer ou infirmer</span>
+      </div>
+      <div class="mode-btn" data-mode="entrainement" onclick="selectMode(this)">
+        <span class="icon">🎓</span>
+        <span class="label">Entraînement</span>
+        <span class="sub">Feedback immédiat</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Leçons à inclure</h2>
+    <p>Coche les thèmes souhaités (au moins un).</p>
+    <div class="lecon-grid" id="lecon-grid">
+      <!-- rempli par JS -->
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Nombre de questions</h2>
+    <div class="count-row">
+      <label>Nombre :</label>
+      <input class="count-input" type="number" id="nb-questions" value="30" min="5" max="168"/>
+      <span style="font-size:0.80rem;color:var(--gris-texte);">max 168 (126 QCM + 42 VF)</span>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">✖ Mélanger &amp; Commencer</button>
+  </div>
+
+  <div class="signature">Questionnaire conçu et produit — <strong>PAR SAOUADOGO W E EPIPHANE</strong></div>
+  <div class="app-date">Application créée en 06/2026</div>
+</div>
+
+<!-- ============================================================ ÉCRAN QUIZ -->
+<div id="screen-quiz">
+  <div class="quiz-meta">
+    <span id="q-counter">Question 1 / 30</span>
+    <span id="q-score-live">Score : 0</span>
+    <span class="timer-display" id="quiz-timer" style="font-size:0.88rem;padding:4px 10px;min-width:68px;">00:00</span>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+
+  <div class="question-card" id="question-card">
+    <span class="lecon-tag" id="lecon-tag"></span>
+    <span class="q-badge qcm" id="q-badge"><span class="dot"></span><span id="badge-label">QCM</span></span>
+    <div class="question-text" id="question-text"></div>
+    <ul class="options-list" id="options-list"></ul>
+    <div class="vf-buttons" id="vf-buttons" style="display:none">
+      <button class="vf-btn vrai" onclick="answerVF('Vrai')">✔ VRAI</button>
+      <button class="vf-btn faux" onclick="answerVF('Faux')">✘ FAUX</button>
+    </div>
+    <div class="feedback-box" id="feedback-box"></div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-nav btn-home-quiz" onclick="confirmGoHome()" title="Retour accueil">🏠</button>
+    <button class="btn-nav btn-passer" onclick="nextQuestion()">Passer →</button>
+    <button class="btn-nav btn-valider" id="btn-valider" onclick="validateAnswer()">Valider</button>
+    <button class="btn-nav btn-suivant" id="btn-suivant" onclick="nextQuestion()">Suivant →</button>
+  </div>
+  <div class="signature" style="margin-top:20px">PAR SAOUADOGO W E EPIPHANE</div>
+</div>
+
+<!-- ============================================================ ÉCRAN RÉSULTATS -->
+<div id="screen-result">
+  <div class="result-hero">
+    <div style="font-size:0.85rem;opacity:0.7;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Résultat final</div>
+    <div class="score-big" id="res-score">--</div>
+    <div class="score-label" id="res-detail">-- bonnes réponses sur --</div>
+    <div class="score-mention" id="res-mention"></div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="val" id="res-bonnes">0</div>
+      <div class="lbl">Bonnes réponses</div>
+    </div>
+    <div class="stat-card">
+      <div class="val rouge" id="res-mauvaises">0</div>
+      <div class="lbl">Mauvaises</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:#f97316" id="res-passes">0</div>
+      <div class="lbl">Passées</div>
+    </div>
+    <div class="stat-card" style="grid-column:1/-1;">
+      <div class="val" style="color:var(--rouge);font-size:1.5rem;" id="res-time">00:00</div>
+      <div class="lbl">Temps total</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h2>Récapitulatif par leçon</h2>
+    <div id="recap-lecons" style="margin-top:10px;font-size:0.85rem;line-height:2;"></div>
+  </div>
+
+  <button class="btn-rejouer" onclick="goHome()">🔄 Nouveau questionnaire</button>
+  <button class="btn-restart" onclick="restartSame()">🔁 Recommencer à 0</button>
+  <button class="btn-copy-perf" id="btn-copy-perf" onclick="copyPerformance()">📸 Copier ma performance</button>
+  <div class="signature">Questionnaire conçu et produit — <strong>PAR SAOUADOGO W E EPIPHANE</strong></div>
+  <div class="app-date">Application créée en 06/2026</div>
+</div>
+
+<!-- ============================================================ JAVASCRIPT -->
+<script>
+/* =====================================================================
+   BASE DE QUESTIONS
+   126 QCM + 42 Vrai/Faux  — mélange aléatoire à l'exécution
+   ===================================================================== */
+
+const LECONS = ["États-Unis","Secteur tertiaire","Secteur secondaire","Secteur primaire","Chine","Nigeria","Burkina Faso","L'Europe"];
+
+const QUESTIONS_QCM = [
+/* =================== ÉTATS-UNIS =================== */
+{l:"États-Unis",q:"Quelle est la capitale fédérale des États-Unis ?",o:["Washington D.C.","New York","Los Angeles","Chicago"],r:0},
+{l:"États-Unis",q:"Quel est le PIB des États-Unis, qui en fait la première puissance économique mondiale ?",o:["Environ 25 000 milliards $","Environ 5 000 milliards $","Environ 15 000 milliards $","Environ 40 000 milliards $"],r:0},
+{l:"États-Unis",q:"La Silicon Valley, principal foyer mondial de l'innovation technologique, est située dans quel État ?",o:["Californie","Texas","New York","Floride"],r:0},
+{l:"États-Unis",q:"Quel port est considéré comme la principale façade maritime des États-Unis sur l'Atlantique ?",o:["New York","Miami","Boston","Baltimore"],r:0},
+{l:"États-Unis",q:"Les États-Unis font partie de quel accord de libre-échange nord-américain ?",o:["USMCA (ex-ALENA)","MERCOSUR","ASEAN","CARICOM"],r:0},
+{l:"États-Unis",q:"Quelle chaîne de montagnes sépare la côte Pacifique du reste du territoire américain ?",o:["Les Rocheuses","Les Appalaches","Les Ozarks","La Sierra Nevada"],r:0},
+{l:"États-Unis",q:"Quelle est la densité moyenne de population aux États-Unis ?",o:["Environ 34 hab/km²","Environ 100 hab/km²","Environ 200 hab/km²","Environ 10 hab/km²"],r:0},
+{l:"États-Unis",q:"Quel fleuve coule du nord au sud et constitue la principale artère de transport intérieur des États-Unis ?",o:["Le Mississippi","Le Missouri","Le Colorado","L'Ohio"],r:0},
+{l:"États-Unis",q:"Comment appelle-t-on la mégalopole qui s'étend de Boston à Washington D.C. ?",o:["BosWash","SunBelt","MidWest","GreatPlains"],r:0},
+{l:"États-Unis",q:"Quel secteur représente la part la plus élevée du PIB américain ?",o:["Le secteur tertiaire","Le secteur secondaire","Le secteur primaire","Le secteur quaternaire"],r:0},
+{l:"États-Unis",q:"Wall Street, symbole de la finance mondiale, est situé dans quelle ville ?",o:["New York","Washington","Boston","Chicago"],r:0},
+{l:"États-Unis",q:"Quelle est la monnaie des États-Unis ?",o:["Le dollar américain","L'euro","La livre sterling","Le franc"],r:0},
+{l:"États-Unis",q:"Quelle organisation mondiale a son siège à New York ?",o:["L'ONU","L'OMC","L'OTAN","L'UNESCO"],r:0},
+{l:"États-Unis",q:"Quel est le surnom donné aux États du Sud des États-Unis où l'industrie s'est développée grâce au soleil et à la main-d'œuvre bon marché ?",o:["Sunbelt","Rustbelt","Cornbelt","BosWash"],r:0},
+{l:"États-Unis",q:"Quelle grande base agricole des États-Unis est surnommée le « grenier à blé » ?",o:["Les Grandes Plaines","La Floride","La Californie","Le Mississippi"],r:0},
+{l:"États-Unis",q:"Quel est l'État américain le plus peuplé ?",o:["Californie","Texas","Floride","New York"],r:0},
+/* =================== SECTEUR TERTIAIRE =================== */
+{l:"Secteur tertiaire",q:"Le secteur tertiaire regroupe principalement :",o:["Les services","L'industrie","L'agriculture","La pêche"],r:0},
+{l:"Secteur tertiaire",q:"Quel sous-secteur du tertiaire désigne les activités liées à la recherche, à la formation et à l'information ?",o:["Le secteur quaternaire","Le commerce","Le transport","Le tourisme"],r:0},
+{l:"Secteur tertiaire",q:"Le tourisme mondial génère environ combien d'emplois dans le monde ?",o:["Environ 330 millions","Environ 50 millions","Environ 10 millions","Environ 1 milliard"],r:0},
+{l:"Secteur tertiaire",q:"Quel pays est le premier pays touristique mondial en nombre de visiteurs internationaux ?",o:["France","États-Unis","Chine","Espagne"],r:0},
+{l:"Secteur tertiaire",q:"Le commerce de détail relève de quel secteur d'activité ?",o:["Tertiaire","Secondaire","Primaire","Quaternaire"],r:0},
+{l:"Secteur tertiaire",q:"Qu'est-ce que la « métropolisation » en lien avec le secteur tertiaire ?",o:["La concentration des services dans les grandes villes","Le développement agricole autour des villes","La désindustrialisation des campagnes","L'expansion du secteur primaire"],r:0},
+{l:"Secteur tertiaire",q:"Le secteur tertiaire est dominant dans les économies :",o:["Développées","En voie de développement","Agricoles","Industrialisées uniquement"],r:0},
+{l:"Secteur tertiaire",q:"Quel type d'activité fait partie du secteur tertiaire ?",o:["Banque et assurance","Extraction minière","Fabrication de textiles","Élevage"],r:0},
+{l:"Secteur tertiaire",q:"Que désigne le terme « e-commerce » dans le secteur tertiaire ?",o:["Commerce en ligne","Commerce de rue","Commerce d'exportation","Commerce rural"],r:0},
+{l:"Secteur tertiaire",q:"Dans les pays développés, la part du secteur tertiaire dans l'emploi est généralement :",o:["Supérieure à 60 %","Inférieure à 30 %","Égale à 50 %","Inférieure à 10 %"],r:0},
+{l:"Secteur tertiaire",q:"Quel type de transport appartient au secteur tertiaire ?",o:["Transport aérien","Fabrication de véhicules","Extraction de pétrole","Culture du coton"],r:0},
+{l:"Secteur tertiaire",q:"Le secteur tertiaire informel est très développé dans :",o:["Les pays en développement","Les pays riches uniquement","Les zones polaires","Les pays pétroliers"],r:0},
+{l:"Secteur tertiaire",q:"Parmi ces propositions, laquelle appartient au secteur tertiaire ?",o:["L'enseignement","La sidérurgie","La riziculture","La pêche"],r:0},
+{l:"Secteur tertiaire",q:"Quelle ville africaine est considérée comme un pôle de services en développement rapide ?",o:["Nairobi","Lagos seul","Abidjan seul","Le Caire seul"],r:0},
+/* =================== SECTEUR SECONDAIRE =================== */
+{l:"Secteur secondaire",q:"Le secteur secondaire désigne l'ensemble des activités :",o:["De transformation et de fabrication","D'extraction de matières premières","De services et de commerce","D'agriculture et d'élevage"],r:0},
+{l:"Secteur secondaire",q:"La sidérurgie est une industrie qui transforme :",o:["Le minerai de fer en acier","Le coton en tissu","Le pétrole en plastique","Le bois en papier"],r:0},
+{l:"Secteur secondaire",q:"Quel pays est le premier producteur mondial d'acier ?",o:["Chine","États-Unis","Inde","Japon"],r:0},
+{l:"Secteur secondaire",q:"La Révolution industrielle a débuté au XVIIIe siècle dans quel pays ?",o:["Royaume-Uni","France","Allemagne","États-Unis"],r:0},
+{l:"Secteur secondaire",q:"Qu'est-ce qu'une zone industrielle ?",o:["Un espace aménagé pour accueillir des usines","Une région agricole","Une zone de services financiers","Un parc naturel"],r:0},
+{l:"Secteur secondaire",q:"L'industrie automobile appartient à quel secteur ?",o:["Secondaire","Primaire","Tertiaire","Quaternaire"],r:0},
+{l:"Secteur secondaire",q:"Les industries de haute technologie (high-tech) sont caractérisées par :",o:["Une forte utilisation de la recherche et de l'innovation","Une main-d'œuvre nombreuse et peu qualifiée","Une faible valeur ajoutée","Une dépendance aux ressources naturelles"],r:0},
+{l:"Secteur secondaire",q:"La désindustrialisation touche surtout :",o:["Les vieux pays industrialisés","Les pays émergents","Les pays en développement","Les pays pétroliers"],r:0},
+{l:"Secteur secondaire",q:"Quel pays concentre la plus grande quantité d'usines d'assemblage de produits électroniques à bas coût ?",o:["Chine","Brésil","Mexique","Turquie"],r:0},
+{l:"Secteur secondaire",q:"Le textile-habillement est une industrie classée dans quel secteur ?",o:["Secondaire","Primaire","Tertiaire","Quaternaire"],r:0},
+{l:"Secteur secondaire",q:"Une centrale électrique appartient à quel secteur d'activité ?",o:["Secondaire","Primaire","Tertiaire","Quaternaire"],r:0},
+{l:"Secteur secondaire",q:"La délocalisation industrielle consiste à :",o:["Transférer la production vers des pays à faibles coûts","Fermer des usines sans relocaliser","Moderniser les usines nationales","Augmenter la production locale"],r:0},
+{l:"Secteur secondaire",q:"Quel type d'énergie a dominé la première Révolution industrielle ?",o:["La vapeur (charbon)","Le pétrole","L'électricité","Le gaz naturel"],r:0},
+{l:"Secteur secondaire",q:"Quelle ville française fut longtemps le symbole de l'industrie sidérurgique ?",o:["Marseille","Lyon","Paris","Lens-Douai"],r:0},
+/* =================== SECTEUR PRIMAIRE =================== */
+{l:"Secteur primaire",q:"Le secteur primaire comprend :",o:["L'agriculture, l'élevage, la pêche et l'exploitation forestière","L'industrie et le bâtiment","Les services et le commerce","La finance et l'assurance"],r:0},
+{l:"Secteur primaire",q:"Quel continent possède la plus grande superficie de terres arables au monde ?",o:["L'Afrique","L'Asie","L'Amérique","L'Europe"],r:0},
+{l:"Secteur primaire",q:"La riziculture inondée (paddy) est surtout pratiquée dans :",o:["L'Asie du Sud-Est et du Sud","L'Afrique subsaharienne","L'Europe de l'Ouest","L'Amérique du Nord"],r:0},
+{l:"Secteur primaire",q:"Qu'est-ce que l'agriculture extensive ?",o:["Grande superficie cultivée avec peu d'intrants par hectare","Petite surface avec beaucoup d'intrants","Culture sans irrigation","Culture uniquement vivrière"],r:0},
+{l:"Secteur primaire",q:"Le coton est la principale culture de rente du Burkina Faso. Dans quel secteur est-il produit ?",o:["Primaire","Secondaire","Tertiaire","Quaternaire"],r:0},
+{l:"Secteur primaire",q:"La déforestation est principalement liée à l'expansion de quelle activité du secteur primaire ?",o:["L'agriculture et l'élevage","La pêche","La sylviculture durable","L'extraction minière"],r:0},
+{l:"Secteur primaire",q:"Les pays dont l'économie repose majoritairement sur le secteur primaire sont généralement :",o:["Des pays en développement","Des pays industrialisés","Des pays pétroliers","Des pays à hauts revenus"],r:0},
+{l:"Secteur primaire",q:"L'aquaculture est une activité qui consiste à :",o:["Élever des poissons et crustacés en milieu contrôlé","Cultiver du blé en plaine","Exploiter des minerais sous-marins","Traiter des eaux usées"],r:0},
+{l:"Secteur primaire",q:"Quel pays est le premier producteur mondial de blé ?",o:["Chine","États-Unis","Inde","Russie"],r:0},
+{l:"Secteur primaire",q:"La transhumance est un mode d'élevage caractérisé par :",o:["Le déplacement saisonnier des troupeaux","L'élevage en stabulation permanente","L'élevage intensif en bâtiment","La sélection génétique des bêtes"],r:0},
+{l:"Secteur primaire",q:"Quel est l'enjeu principal de la sécurité alimentaire mondiale ?",o:["Nourrir les 8 milliards d'êtres humains de manière durable","Exporter le plus de céréales possible","Industrialiser l'agriculture mondiale","Réduire la surface cultivée"],r:0},
+{l:"Secteur primaire",q:"La pêche artisanale se différencie de la pêche industrielle par :",o:["Des moyens limités, une production de subsistance","Des bateaux-usines et des filets pélagiques","Une mécanisation totale","Un marché d'exportation dominant"],r:0},
+{l:"Secteur primaire",q:"Les cultures vivrières sont des cultures destinées à :",o:["L'alimentation directe des producteurs","L'exportation sur les marchés mondiaux","La fabrication de carburant","La décoration"],r:0},
+/* =================== CHINE =================== */
+{l:"Chine",q:"Quelle est la capitale de la Chine ?",o:["Pékin (Beijing)","Shanghai","Hong Kong","Canton"],r:0},
+{l:"Chine",q:"La Chine est le pays le plus peuplé du monde avec environ combien d'habitants ?",o:["1,4 milliard","800 millions","2 milliards","500 millions"],r:0},
+{l:"Chine",q:"Quel est le fleuve le plus long de Chine ?",o:["Le Yangtsé","Le Huang He","Le Mékong","La Perle"],r:0},
+{l:"Chine",q:"La Chine est classée au rang mondial d'économie en termes de PIB en PPA ?",o:["1ère","2e","3e","5e"],r:0},
+{l:"Chine",q:"Quelle politique démographique la Chine a-t-elle menée de 1979 à 2015 ?",o:["La politique de l'enfant unique","La politique nataliste","La politique migratoire","La politique d'urbanisation forcée"],r:0},
+{l:"Chine",q:"Quel grand projet d'infrastructures mondial la Chine pilote depuis 2013 ?",o:["Les Nouvelles Routes de la Soie","Le Plan Marshall","L'Initiative G20","Le Plan Afrique 2050"],r:0},
+{l:"Chine",q:"La Chine est le premier exportateur mondial. Quelle ville est son principal port commercial ?",o:["Shanghai","Pékin","Shenzhen","Guangzhou"],r:0},
+{l:"Chine",q:"Quelle zone économique spéciale chinoise, créée en 1980, symbolise l'ouverture économique ?",o:["Shenzhen","Wuhan","Chengdu","Nanjing"],r:0},
+{l:"Chine",q:"Le Grand Bond en avant était une politique de :",o:["Modernisation économique forcée sous Mao","Réforme démocratique","Libéralisation des marchés","Décollectivisation agricole"],r:0},
+{l:"Chine",q:"La Chine est le premier producteur mondial de :",o:["Acier, ciment, charbon","Pétrole brut","Blé uniquement","Or uniquement"],r:0},
+{l:"Chine",q:"Quelle mer borde la façade maritime est de la Chine ?",o:["La mer de Chine orientale et méridionale","La mer Méditerranée","La mer Rouge","L'océan Indien"],r:0},
+{l:"Chine",q:"Quelle est la religion la plus répandue en Chine traditionnellement ?",o:["Le bouddhisme, taoïsme, confucianisme","L'islam","Le christianisme","L'hindouisme"],r:0},
+{l:"Chine",q:"Le barrage des Trois Gorges en Chine a été construit sur quel fleuve ?",o:["Le Yangtsé","Le Huang He","La Perle","Le Mékong"],r:0},
+{l:"Chine",q:"Quelle organisation régionale la Chine co-préside ou influence fortement en Asie centrale ?",o:["L'OCS (Organisation de Coopération de Shanghai)","L'ASEAN","L'OTAN","L'Union africaine"],r:0},
+{l:"Chine",q:"Le PIB par habitant de la Chine la classe dans la catégorie des pays :",o:["À revenus intermédiaires, tranche supérieure","Pauvres","Très riches (OCDE)","Au même niveau que les États-Unis"],r:0},
+{l:"Chine",q:"Quel est le nom de la monnaie chinoise ?",o:["Le yuan (renminbi)","Le yen","Le won","Le baht"],r:0},
+/* =================== NIGERIA =================== */
+{l:"Nigeria",q:"Quelle est la capitale fédérale du Nigeria depuis 1991 ?",o:["Abuja","Lagos","Kano","Ibadan"],r:0},
+{l:"Nigeria",q:"Le Nigeria est le pays le plus peuplé d'Afrique, avec environ combien d'habitants ?",o:["220 millions","100 millions","150 millions","300 millions"],r:0},
+{l:"Nigeria",q:"Quelle ressource naturelle fait du Nigeria le premier producteur africain ?",o:["Le pétrole brut","Le diamant","L'or","Le coltan"],r:0},
+{l:"Nigeria",q:"Le delta du Niger est surtout connu pour :",o:["Ses gisements pétroliers et les conflits environnementaux","Sa production agricole","Ses infrastructures touristiques","Son industrie textile"],r:0},
+{l:"Nigeria",q:"Quelle ville est la plus grande métropole et la capitale économique du Nigeria ?",o:["Lagos","Abuja","Port Harcourt","Kaduna"],r:0},
+{l:"Nigeria",q:"Le Nigeria appartient à quelle organisation régionale africaine ?",o:["La CEDEAO","La SADC","L'UMA","La CEEAC"],r:0},
+{l:"Nigeria",q:"Quel groupe terroriste islamiste sévit dans le nord-est du Nigeria ?",o:["Boko Haram","Al-Shabaab","AQMI","Daesh-Sahel"],r:0},
+{l:"Nigeria",q:"La principale langue officielle du Nigeria est :",o:["L'anglais","Le haoussa","Le yoruba","Le français"],r:0},
+{l:"Nigeria",q:"Quel est le problème majeur du Nigeria malgré ses ressources pétrolières ?",o:["Le paradoxe de la pauvreté et des inégalités","L'absence de ressources","Le manque de population","L'isolement géographique"],r:0},
+{l:"Nigeria",q:"Nollywood est la célèbre industrie du cinéma nigérian. Elle est classée :",o:["2e ou 3e industrie cinématographique mondiale","Première mondiale","Dernière mondiale","Absente du classement mondial"],r:0},
+{l:"Nigeria",q:"Le Nigeria est membre de quelle organisation pétrolière mondiale ?",o:["L'OPEP","L'OTAN","L'OIT","L'OMC uniquement"],r:0},
+{l:"Nigeria",q:"Quelle monnaie utilise le Nigeria ?",o:["Le naira","Le franc CFA","Le cedi","Le rand"],r:0},
+{l:"Nigeria",q:"Le lac Tchad, que partage partiellement le Nigeria, est en danger à cause de :",o:["Sa réduction dramatique due au changement climatique","Sa pollution par le pétrole","Son débordement","Sa privatisation"],r:0},
+{l:"Nigeria",q:"Quelle région du Nigeria est la plus peuplée et la plus urbanisée ?",o:["Le Sud-Ouest (Lagos, Ibadan)","Le Nord aride","L'Est forestier","Le Centre"],r:0},
+{l:"Nigeria",q:"Le Nigeria pratique quel type de régime politique actuellement ?",o:["La démocratie présidentielle fédérale","La monarchie constitutionnelle","La dictature militaire","La théocratie"],r:0},
+/* =================== BURKINA FASO =================== */
+{l:"Burkina Faso",q:"Quelle est la capitale du Burkina Faso ?",o:["Ouagadougou","Bobo-Dioulasso","Koudougou","Banfora"],r:0},
+{l:"Burkina Faso",q:"Quel est le principal cours d'eau du Burkina Faso ?",o:["Le Mouhoun (Volta Noire)","Le Niger","La Comoé","Le Nakambé"],r:0},
+{l:"Burkina Faso",q:"Quelle est la principale culture de rente du Burkina Faso ?",o:["Le coton","Le cacao","Le café","L'arachide"],r:0},
+{l:"Burkina Faso",q:"Le Burkina Faso est un pays enclavé. Combien de pays le limitent ?",o:["6 pays","4 pays","3 pays","8 pays"],r:0},
+{l:"Burkina Faso",q:"Quelle est la monnaie utilisée au Burkina Faso ?",o:["Le franc CFA (UEMOA)","Le naira","Le cedi","Le franc burkinabè"],r:0},
+{l:"Burkina Faso",q:"Quel festival international du cinéma africain se tient à Ouagadougou ?",o:["Le FESPACO","Le SIAO","Le FASO-MUSIC","Le FESTIMA"],r:0},
+{l:"Burkina Faso",q:"Le Burkina Faso appartient à quelle zone économique régionale ?",o:["L'UEMOA et la CEDEAO","La SADC","La CEEAC","La CEMAC"],r:0},
+{l:"Burkina Faso",q:"Quelle ressource minière est de plus en plus exploitée au Burkina Faso ?",o:["L'or","Le pétrole","Le diamant","Le cuivre"],r:0},
+{l:"Burkina Faso",q:"Quel est l'enjeu démographique majeur du Burkina Faso ?",o:["Une croissance démographique rapide dépassant la croissance économique","Une dépopulation","Un vieillissement accéléré","Une émigration massive permanente"],r:0},
+{l:"Burkina Faso",q:"Quelle organisation terroriste sévit au Burkina Faso depuis 2015 ?",o:["Le GSIM (Groupe de Soutien à l'Islam et aux Musulmans) et JNIM","Boko Haram uniquement","Al-Shabaab","Les FARC"],r:0},
+{l:"Burkina Faso",q:"Quel nom portait le Burkina Faso avant 1984 ?",o:["Haute-Volta","Côte d'Ivoire","Soudan français","République soudanaise"],r:0},
+{l:"Burkina Faso",q:"Le Burkina Faso est traversé par quel grand couloir migratoire africain ?",o:["Le couloir sahélien vers les côtes atlantiques","Le couloir transsaharien","Le couloir est-africain","Le couloir méditerranéen"],r:0},
+{l:"Burkina Faso",q:"Quelle est la deuxième ville du Burkina Faso par sa taille et son activité économique ?",o:["Bobo-Dioulasso","Koudougou","Banfora","Ouahigouya"],r:0},
+{l:"Burkina Faso",q:"Quel fleuve international traverse aussi le Burkina Faso dans sa partie est ?",o:["Le Niger","Le Sénégal","La Casamance","Le Bani"],r:0},
+{l:"Burkina Faso",q:"Le SIAO est un salon international dédié à :",o:["L'artisanat africain","L'industrie agricole","L'automobile","L'informatique"],r:0},
+{l:"Burkina Faso",q:"Le taux d'alphabétisation au Burkina Faso est parmi les plus bas au monde. Il avoisine :",o:["Environ 40 à 45 %","Environ 80 %","Environ 65 %","Environ 20 %"],r:0},
+/* =================== L'EUROPE =================== */
+{l:"L'Europe",q:"Combien de pays membres compte l'Union européenne ?",o:["27","28","30","25"],r:0},
+{l:"L'Europe",q:"Quelle est la monnaie unique de la zone euro ?",o:["L'euro","La livre sterling","Le franc suisse","La couronne"],r:0},
+{l:"L'Europe",q:"Quel est le pays le plus peuplé de l'Union européenne ?",o:["Allemagne","France","Italie","Espagne"],r:0},
+{l:"L'Europe",q:"Quel traité fondateur de l'intégration européenne a été signé en 1957 ?",o:["Le traité de Rome","Le traité de Maastricht","Le traité de Lisbonne","Le traité de Paris"],r:0},
+{l:"L'Europe",q:"La mégalopole européenne s'étend de quel pays à quel autre pays ?",o:["Du Royaume-Uni au nord de l'Italie","De l'Espagne à la Pologne","De la France à la Russie","Du Portugal à la Grèce"],r:0},
+{l:"L'Europe",q:"Quel est le plus grand pays d'Europe en superficie ?",o:["La Russie","L'Ukraine","La France","L'Allemagne"],r:0},
+{l:"L'Europe",q:"Quelle institution européenne vote les lois et représente les citoyens ?",o:["Le Parlement européen","La Commission européenne","Le Conseil de l'UE","La BCE"],r:0},
+{l:"L'Europe",q:"Quel espace permet la libre circulation des personnes entre 26 pays européens ?",o:["L'espace Schengen","L'espace euro","La zone OTAN","L'espace EEE"],r:0},
+{l:"L'Europe",q:"Quel fleuve est souvent qualifié d'axe industriel et commercial de l'Europe de l'Ouest ?",o:["Le Rhin","La Loire","Le Danube","La Tamise"],r:0},
+{l:"L'Europe",q:"Le Brexit désigne :",o:["La sortie du Royaume-Uni de l'Union européenne","L'entrée de la Bretagne dans l'UE","La réforme budgétaire de l'UE","Le retrait de la Grèce de la zone euro"],r:0},
+{l:"L'Europe",q:"Quel pays est la première puissance économique de l'Union européenne ?",o:["L'Allemagne","La France","L'Italie","L'Espagne"],r:0},
+{l:"L'Europe",q:"La politique agricole commune (PAC) est un mécanisme de :",o:["Subventionnement et régulation de l'agriculture en Europe","Privatisation de l'agriculture","Libéralisation totale des marchés agricoles","Suppression des aides aux agriculteurs"],r:0},
+{l:"L'Europe",q:"Quel détroit sépare l'Europe de l'Afrique à son point le plus étroit ?",o:["Le détroit de Gibraltar","Le détroit de Messine","Le détroit du Bosphore","Le canal de Suez"],r:0},
+{l:"L'Europe",q:"Quelle ville est le siège des institutions principales de l'Union européenne ?",o:["Bruxelles","Paris","Berlin","Strasbourg"],r:0},
+{l:"L'Europe",q:"La politique de cohésion de l'UE vise à :",o:["Réduire les inégalités entre régions riches et pauvres","Uniformiser la langue en Europe","Créer une armée commune","Supprimer les frontières douanières"],r:0},
+{l:"L'Europe",q:"Quel événement majeur a marqué la réunification de l'Europe de l'Est à l'Ouest ?",o:["La chute du mur de Berlin en 1989","La création de l'euro en 1999","La signature du traité de Maastricht","L'élargissement de l'OTAN"],r:0},
+];
+
+const QUESTIONS_VF = [
+/* États-Unis */
+{l:"États-Unis",q:"Washington D.C. est à la fois la capitale fédérale et la ville la plus peuplée des États-Unis.",r:"Faux",e:"Washington D.C. est bien la capitale fédérale, mais New York est la ville la plus peuplée."},
+{l:"États-Unis",q:"Les États-Unis sont le deuxième plus grand pays du monde par superficie.",r:"Faux",e:"Les États-Unis sont le 3e ou 4e selon les classements, derrière la Russie, le Canada et parfois la Chine."},
+{l:"États-Unis",q:"La Silicon Valley est synonyme de la puissance technologique et numérique des États-Unis.",r:"Vrai",e:"La Silicon Valley en Californie concentre les plus grandes entreprises technologiques mondiales (Google, Apple, Meta...)."},
+{l:"États-Unis",q:"Les États-Unis font partie du groupe des pays les plus pauvres du monde.",r:"Faux",e:"Les États-Unis sont la première puissance économique mondiale avec un PIB d'environ 25 000 milliards $."},
+{l:"États-Unis",q:"Le Mississippi est le principal fleuve des États-Unis, traversant le pays du nord au sud.",r:"Vrai",e:"Le Mississippi coule du Minnesota jusqu'au golfe du Mexique, c'est l'artère fluviale principale."},
+/* Secteur tertiaire */
+{l:"Secteur tertiaire",q:"Le secteur tertiaire comprend l'agriculture et la pêche.",r:"Faux",e:"Ces activités appartiennent au secteur primaire."},
+{l:"Secteur tertiaire",q:"Le tourisme est une activité appartenant au secteur tertiaire.",r:"Vrai",e:"Le tourisme est un service ; il relève bien du secteur tertiaire."},
+{l:"Secteur tertiaire",q:"Dans les pays développés, le secteur tertiaire emploie plus de la moitié de la population active.",r:"Vrai",e:"Dans la plupart des pays de l'OCDE, plus de 70 % des actifs travaillent dans les services."},
+{l:"Secteur tertiaire",q:"Le secteur quaternaire désigne les industries lourdes comme la sidérurgie.",r:"Faux",e:"Le secteur quaternaire désigne les activités liées à l'information, la recherche et la formation."},
+{l:"Secteur tertiaire",q:"La France est le premier pays touristique mondial par le nombre de visiteurs internationaux.",r:"Vrai",e:"La France reçoit environ 90 millions de touristes internationaux par an, en tête mondiale."},
+/* Secteur secondaire */
+{l:"Secteur secondaire",q:"La Révolution industrielle a commencé en France au XVIIIe siècle.",r:"Faux",e:"La Révolution industrielle a commencé en Angleterre (Royaume-Uni) à la fin du XVIIIe siècle."},
+{l:"Secteur secondaire",q:"La Chine est le premier producteur mondial d'acier.",r:"Vrai",e:"La Chine produit plus de 50 % de l'acier mondial."},
+{l:"Secteur secondaire",q:"La désindustrialisation est un phénomène observé dans les vieux pays industriels.",r:"Vrai",e:"Les pays comme les USA, le Royaume-Uni ou la France ont vu leur part industrielle décliner au profit des services."},
+{l:"Secteur secondaire",q:"L'industrie textile appartient au secteur primaire.",r:"Faux",e:"La transformation du coton en tissu est une activité du secteur secondaire (industrie)."},
+/* Secteur primaire */
+{l:"Secteur primaire",q:"L'agriculture vivrière est destinée à la vente sur les marchés internationaux.",r:"Faux",e:"L'agriculture vivrière est destinée à l'alimentation directe des producteurs et de leurs familles."},
+{l:"Secteur primaire",q:"La riziculture inondée est surtout pratiquée en Asie du Sud et du Sud-Est.",r:"Vrai",e:"Le riz en paddy nécessite beaucoup d'eau ; il est dominant en Chine, Inde, Thaïlande, Vietnam."},
+{l:"Secteur primaire",q:"Le Burkina Faso est le premier producteur mondial de coton.",r:"Faux",e:"La Chine, l'Inde et les États-Unis dominent la production mondiale de coton. Le Burkina est le premier producteur africain."},
+{l:"Secteur primaire",q:"La pêche artisanale et la pêche industrielle appartiennent toutes deux au secteur primaire.",r:"Vrai",e:"Toutes deux relèvent de l'extraction de ressources naturelles, donc du secteur primaire."},
+/* Chine */
+{l:"Chine",q:"La Chine est le pays le plus peuplé du monde avec plus d'1,4 milliard d'habitants.",r:"Vrai",e:"La Chine comptait environ 1,4 milliard d'habitants, bien que l'Inde soit désormais très proche."},
+{l:"Chine",q:"Le yuan est la monnaie officielle de la Chine.",r:"Vrai",e:"Le yuan (ou renminbi) est bien la monnaie nationale chinoise."},
+{l:"Chine",q:"Shanghai est la capitale politique de la Chine.",r:"Faux",e:"Pékin (Beijing) est la capitale politique de la Chine. Shanghai est la capitale économique et financière."},
+{l:"Chine",q:"La politique de l'enfant unique a été appliquée en Chine de 1979 à 2015.",r:"Vrai",e:"Cette politique démographique a duré environ 35 ans avant d'être abandonnée."},
+{l:"Chine",q:"Le barrage des Trois Gorges a été construit sur le fleuve Huang He.",r:"Faux",e:"Le barrage des Trois Gorges a été construit sur le Yangtsé, le plus long fleuve de Chine."},
+/* Nigeria */
+{l:"Nigeria",q:"Lagos est la capitale fédérale du Nigeria.",r:"Faux",e:"Lagos est la capitale économique, mais Abuja est la capitale fédérale depuis 1991."},
+{l:"Nigeria",q:"Le Nigeria est le premier producteur de pétrole en Afrique.",r:"Vrai",e:"Le Nigeria possède les plus grandes réserves pétrolières d'Afrique subsaharienne."},
+{l:"Nigeria",q:"Nollywood est la deuxième ou troisième industrie cinématographique mondiale.",r:"Vrai",e:"Nollywood produit des milliers de films par an, juste derrière Bollywood et Hollywood."},
+{l:"Nigeria",q:"Le Nigeria est un pays francophone.",r:"Faux",e:"Le Nigeria est anglophone. Sa langue officielle est l'anglais."},
+{l:"Nigeria",q:"Le naira est la monnaie officielle du Nigeria.",r:"Vrai",e:"Le naira est bien la monnaie nationale du Nigeria."},
+/* Burkina Faso */
+{l:"Burkina Faso",q:"Ouagadougou est la capitale du Burkina Faso.",r:"Vrai",e:"Ouagadougou, surnommée 'Ouaga', est la capitale politique et économique du Burkina Faso."},
+{l:"Burkina Faso",q:"Le Burkina Faso est un pays côtier bordé par l'océan Atlantique.",r:"Faux",e:"Le Burkina Faso est un pays entièrement enclavé sans accès à la mer."},
+{l:"Burkina Faso",q:"Le coton est la principale culture de rente du Burkina Faso.",r:"Vrai",e:"Le Burkina Faso est le premier producteur africain de coton."},
+{l:"Burkina Faso",q:"Le FESPACO est un festival de cinéma africain qui se tient à Ouagadougou.",r:"Vrai",e:"Le FESPACO (Festival Panafricain du Cinéma et de la Télévision de Ouagadougou) est le plus grand festival de cinéma africain."},
+{l:"Burkina Faso",q:"Avant 1984, le Burkina Faso s'appelait la Côte d'Ivoire.",r:"Faux",e:"Avant 1984, le Burkina Faso s'appelait la Haute-Volta. La Côte d'Ivoire est un pays voisin."},
+/* L'Europe */
+{l:"L'Europe",q:"L'Union européenne compte actuellement 27 États membres.",r:"Vrai",e:"Après le Brexit (sortie du Royaume-Uni en 2020), l'UE compte 27 membres."},
+{l:"L'Europe",q:"Le Rhin est l'axe industriel et commercial majeur de l'Europe de l'Ouest.",r:"Vrai",e:"Le Rhin relie les grandes zones industrielles de Suisse, France, Allemagne et Pays-Bas."},
+{l:"L'Europe",q:"L'Allemagne est le pays le plus peuplé et la première économie de l'UE.",r:"Vrai",e:"L'Allemagne concentre environ 80 millions d'habitants et produit le PIB le plus élevé de l'UE."},
+{l:"L'Europe",q:"L'espace Schengen permet la libre circulation des personnes sans contrôle aux frontières internes.",r:"Vrai",e:"L'espace Schengen regroupe 26 pays dont la plupart des membres de l'UE."},
+{l:"L'Europe",q:"Le Brexit désigne l'entrée du Royaume-Uni dans la zone euro.",r:"Faux",e:"Le Brexit désigne la sortie du Royaume-Uni de l'Union européenne, effective en 2020. Le RU n'a jamais adopté l'euro."},
+];
+
+/* =====================================================================
+   ÉTAT DE L'APPLICATION
+   ===================================================================== */
+let mode = 'mixte';
+let sessionQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let passees = 0;
+let answered = false;
+let resultByLecon = {};
+
+// Timer
+let timerInterval = null;
+let timerSeconds = 0;
+
+const leconChecks = {};
+
+/* =====================================================================
+   INITIALISATION
+   ===================================================================== */
+function init() {
+  const grid = document.getElementById('lecon-grid');
+  LECONS.forEach(l => {
+    const wrap = document.createElement('label');
+    wrap.className = 'lecon-check';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = true;
+    leconChecks[l] = cb;
+    wrap.appendChild(cb);
+    wrap.appendChild(document.createTextNode(l));
+    grid.appendChild(wrap);
+  });
+}
+
+function selectMode(btn) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  mode = btn.dataset.mode;
+}
+
+/* =====================================================================
+   TIMER
+   ===================================================================== */
+function formatTime(s) {
+  const m = Math.floor(s / 60), sec = s % 60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+function startTimer() {
+  stopTimer(); timerSeconds = 0;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    const el = document.getElementById('quiz-timer');
+    if (el) el.textContent = formatTime(timerSeconds);
+  }, 1000);
+}
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+/* =====================================================================
+   DÉMARRER LE QUIZ
+   ===================================================================== */
+function startQuiz() {
+  const selectedLecons = LECONS.filter(l => leconChecks[l] && leconChecks[l].checked);
+  if (selectedLecons.length === 0) { alert("Veuillez sélectionner au moins une leçon."); return; }
+
+  let pool = [];
+  let qcmPool = QUESTIONS_QCM.filter(q => selectedLecons.includes(q.l));
+  let vfPool  = QUESTIONS_VF.filter(q => selectedLecons.includes(q.l));
+
+  if (mode === 'qcm') pool = [...qcmPool];
+  else if (mode === 'vf') pool = [...vfPool].map(q => ({...q, type:'vf'}));
+  else {
+    pool = [...qcmPool, ...vfPool.map(q => ({...q, type:'vf'}))];
+  }
+
+  shuffle(pool);
+
+  let nb = parseInt(document.getElementById('nb-questions').value) || 30;
+  nb = Math.min(nb, pool.length);
+  sessionQuestions = pool.slice(0, nb);
+
+  currentIndex = 0;
+  score = 0;
+  passees = 0;
+  resultByLecon = {};
+  selectedLecons.forEach(l => { resultByLecon[l] = {bon:0, total:0}; });
+
+  document.getElementById('screen-home').style.display = 'none';
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-quiz').style.display = 'block';
+  startTimer();
+  showQuestion();
+}
+
+/* =====================================================================
+   AFFICHER LA QUESTION
+   ===================================================================== */
+function showQuestion() {
+  answered = false;
+  const q = sessionQuestions[currentIndex];
+  const total = sessionQuestions.length;
+  const isVF = q.type === 'vf';
+
+  document.getElementById('q-counter').textContent = `Question ${currentIndex+1} / ${total}`;
+  document.getElementById('q-score-live').textContent = `Score : ${score}`;
+  document.getElementById('progress-bar').style.width = `${(currentIndex/total)*100}%`;
+
+  const card = document.getElementById('question-card');
+  card.className = 'question-card' + (isVF ? ' type-vf' : '');
+
+  const badge = document.getElementById('q-badge');
+  badge.className = 'q-badge ' + (isVF ? 'vf' : 'qcm');
+  document.getElementById('badge-label').textContent = isVF ? 'VRAI / FAUX' : 'QCM';
+
+  document.getElementById('lecon-tag').textContent = q.l;
+  document.getElementById('question-text').textContent = q.q;
+
+  const fb = document.getElementById('feedback-box');
+  fb.className = 'feedback-box';
+  fb.textContent = '';
+
+  document.getElementById('btn-valider').style.display = 'inline-block';
+  document.getElementById('btn-suivant').style.display = 'none';
+
+  if (!isVF) {
+    document.getElementById('options-list').style.display = 'flex';
+    document.getElementById('vf-buttons').style.display = 'none';
+    renderOptions(q);
+  } else {
+    document.getElementById('options-list').style.display = 'none';
+    document.getElementById('vf-buttons').style.display = 'flex';
+    renderVF();
+  }
+}
+
+function renderOptions(q) {
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.o.forEach((opt, i) => {
+    const li = document.createElement('li');
+    li.className = 'option-item';
+    li.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    li.onclick = () => selectOption(li, i);
+    list.appendChild(li);
+  });
+}
+
+function renderVF() {
+  const btns = document.getElementById('vf-buttons');
+  btns.querySelectorAll('.vf-btn').forEach(b => {
+    b.className = 'vf-btn ' + b.classList[1];
+  });
+}
+
+function selectOption(li, idx) {
+  if (answered) return;
+  document.querySelectorAll('#options-list .option-item').forEach(el => el.classList.remove('selected'));
+  li.classList.add('selected');
+  li.dataset.selected = idx;
+}
+
+/* =====================================================================
+   VALIDER
+   ===================================================================== */
+function validateAnswer() {
+  if (answered) return;
+  const q = sessionQuestions[currentIndex];
+  const isVF = q.type === 'vf';
+  const fb = document.getElementById('feedback-box');
+
+  if (!isVF) {
+    const selected = document.querySelector('#options-list .option-item.selected');
+    if (!selected) { alert("Sélectionne une réponse !"); return; }
+    const idx = parseInt(selected.dataset.selected);
+    const correct = q.r;
+    answered = true;
+    const items = document.querySelectorAll('#options-list .option-item');
+    items[correct].classList.add('correct');
+    if (idx === correct) {
+      score++;
+      if (resultByLecon[q.l]) resultByLecon[q.l].bon++;
+      showFeedback(fb, true, "✔ Bonne réponse !");
+    } else {
+      selected.classList.remove('selected');
+      selected.classList.add('wrong');
+      showFeedback(fb, false, `✘ Mauvaise réponse. La bonne réponse est : ${q.o[correct]}`);
+    }
+    if (resultByLecon[q.l]) resultByLecon[q.l].total++;
+  } else {
+    // VF: check if a button has been "selected"
+    const btns = document.getElementById('vf-buttons').querySelectorAll('.vf-btn');
+    const vSel = [...btns].find(b => b.classList.contains('selected-vrai') || b.classList.contains('selected-faux'));
+    if (!vSel) { alert("Clique sur VRAI ou FAUX !"); return; }
+    const chosen = vSel.classList.contains('selected-vrai') ? 'Vrai' : 'Faux';
+    answered = true;
+    if (chosen === q.r) {
+      score++;
+      if (resultByLecon[q.l]) resultByLecon[q.l].bon++;
+      const correctClass = q.r === 'Vrai' ? 'correct-vrai' : 'correct-faux';
+      vSel.className = 'vf-btn ' + (q.r === 'Vrai' ? 'vrai' : 'faux') + ' ' + correctClass;
+      showFeedback(fb, true, `✔ Correct ! C'est ${q.r}. ${q.e||''}`);
+    } else {
+      vSel.classList.add('wrong-btn');
+      // show correct
+      const correctBtn = [...btns].find(b => b.classList.contains('vrai') && q.r === 'Vrai' || b.classList.contains('faux') && q.r === 'Faux');
+      if(correctBtn) correctBtn.className = 'vf-btn ' + (q.r === 'Vrai' ? 'vrai correct-vrai' : 'faux correct-faux');
+      showFeedback(fb, false, `✘ Faux ! La bonne réponse est : ${q.r}. ${q.e||''}`);
+    }
+    if (resultByLecon[q.l]) resultByLecon[q.l].total++;
+  }
+
+  document.getElementById('btn-valider').style.display = 'none';
+  document.getElementById('btn-suivant').style.display = 'inline-block';
+}
+
+function answerVF(val) {
+  if (answered) return;
+  const btns = document.getElementById('vf-buttons').querySelectorAll('.vf-btn');
+  btns.forEach(b => { b.className = 'vf-btn ' + (b.classList.contains('vrai') ? 'vrai' : 'faux'); });
+  if (val === 'Vrai') btns[0].classList.add('selected-vrai');
+  else btns[1].classList.add('selected-faux');
+}
+
+function showFeedback(el, ok, msg) {
+  el.className = 'feedback-box show ' + (ok ? 'ok' : 'ko');
+  el.textContent = msg;
+}
+
+/* =====================================================================
+   NAVIGATION
+   ===================================================================== */
+function nextQuestion() {
+  if (!answered) passees++;
+  currentIndex++;
+  if (currentIndex >= sessionQuestions.length) { showResults(); return; }
+  showQuestion();
+}
+
+/* =====================================================================
+   RÉSULTATS
+   ===================================================================== */
+function showResults() {
+  stopTimer();
+  document.getElementById('screen-quiz').style.display = 'none';
+  document.getElementById('screen-result').style.display = 'block';
+
+  const total = sessionQuestions.length;
+  const pct = Math.round((score/total)*100);
+  document.getElementById('res-score').textContent = pct + '%';
+  document.getElementById('res-detail').textContent = `${score} bonne(s) réponse(s) sur ${total}`;
+  document.getElementById('res-bonnes').textContent = score;
+  document.getElementById('res-mauvaises').textContent = total - score - passees;
+  document.getElementById('res-passes').textContent = passees;
+  const teEl = document.getElementById('res-time');
+  if (teEl) teEl.textContent = formatTime(timerSeconds);
+
+  const mention = document.getElementById('res-mention');
+  if (pct >= 80) { mention.textContent = '🏆 Excellent !'; mention.className = 'score-mention mention-excellent'; }
+  else if (pct >= 60) { mention.textContent = '👍 Bien'; mention.className = 'score-mention mention-bien'; }
+  else if (pct >= 50) { mention.textContent = '📚 Passable'; mention.className = 'score-mention mention-passable'; }
+  else { mention.textContent = '⚠️ À revoir'; mention.className = 'score-mention mention-insuffisant'; }
+
+  const recap = document.getElementById('recap-lecons');
+  recap.innerHTML = '';
+  Object.entries(resultByLecon).forEach(([l, d]) => {
+    if (d.total === 0) return;
+    const p = Math.round((d.bon/d.total)*100);
+    const bar = `<div style="background:var(--gris-moyen);border-radius:4px;height:6px;margin-top:2px;margin-bottom:6px"><div style="width:${p}%;height:100%;background:${p>=60?'var(--vert)':'var(--rouge)'};border-radius:4px"></div></div>`;
+    recap.innerHTML += `<div style="margin-bottom:8px"><span style="font-weight:600">${l}</span> — ${d.bon}/${d.total} (${p}%)${bar}</div>`;
+  });
+}
+
+function goHome() {
+  stopTimer(); timerSeconds = 0;
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-home').style.display = 'block';
+}
+
+function confirmGoHome() {
+  if (confirm('Abandonner ce quiz et retourner à l\'accueil ?')) {
+    stopTimer(); timerSeconds = 0;
+    score = 0; passees = 0; currentIndex = 0; answered = false;
+    document.getElementById('screen-quiz').style.display = 'none';
+    document.getElementById('screen-home').style.display = 'block';
+  }
+}
+
+function restartSame() {
+  if (sessionQuestions.length === 0) { goHome(); return; }
+  shuffle(sessionQuestions);
+  currentIndex = 0; score = 0; passees = 0; answered = false;
+  Object.keys(resultByLecon).forEach(l => { resultByLecon[l] = {bon:0, total:0}; });
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-quiz').style.display = 'block';
+  startTimer();
+  showQuestion();
+}
+
+async function copyPerformance() {
+  const btn = document.getElementById('btn-copy-perf');
+  const pct  = document.getElementById('res-score').textContent;
+  const det  = document.getElementById('res-detail').textContent;
+  const bon  = document.getElementById('res-bonnes').textContent;
+  const mauv = document.getElementById('res-mauvaises').textContent;
+  const pass = document.getElementById('res-passes').textContent;
+  const tps  = document.getElementById('res-time').textContent;
+  const ment = document.getElementById('res-mention').textContent;
+  const text =
+`📊 MA PERFORMANCE — Questionnaire HG Terminale A
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏆 Score : ${pct}  ${ment}
+📝 ${det}
+✅ Bonnes réponses : ${bon}
+❌ Mauvaises : ${mauv}
+⏭ Passées : ${pass}
+⏱ Temps : ${tps}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+© PAR SAOUADOGO W E EPIPHANE — 06/2026`;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  btn.textContent = '✅ Copié !'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = '📸 Copier ma performance'; btn.classList.remove('copied'); }, 2500);
+}
+
+/* =====================================================================
+   UTILITAIRES
+   ===================================================================== */
+function shuffle(arr) {
+  for (let i = arr.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+init();
+</script>
+</body>
+</html>
