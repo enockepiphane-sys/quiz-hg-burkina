@@ -36,8 +36,9 @@
     return audioCtx;
   }
   function tone(freq, duration, type, vol) {
-    const ctx = getCtx();
-    const osc = ctx.createOscillator();
+  const ctx = getCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+  const osc = ctx.createOscillator();  
     const gain = ctx.createGain();
     osc.type = type || 'sine';
     osc.frequency.value = freq;
