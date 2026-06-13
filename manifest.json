@@ -1,0 +1,35 @@
+{
+  "name": "Quiz HG Burkina",
+  "short_name": "Quiz HG",
+  "start_url": "/quiz-hg-burkina/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a7a3c",
+  "icons": [
+    {
+      "src": "/quiz-hg-burkina/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/quiz-hg-burkina/screenshots/IMG_20260613_134105_002[1].png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "label": "Accueil"
+    },
+    {
+      "src": "/quiz-hg-burkina/screenshots/Screenshot_20260613-133954[1].png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "label": "Mode de jeu"
+    },
+    {
+      "src": "/quiz-hg-burkina/screenshots/Screenshot_20260613-133959[1].png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "label": "Leçons"
+    }
+  ]
+}
