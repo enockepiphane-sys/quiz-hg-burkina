@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionnaire HG – Terminale A</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --vert:    #1B5E3B;
+    --rouge:   #C0392B;
+    --jaune:   #F4C430;
+    --noir:    #0F0F0F;
+    --beige:   #FDF6E3;
+    --gris:    #E8E3D8;
+    --blanc:   #FFFFFF;
+    --ombre:   rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--beige);
+    color: var(--noir);
+    min-height: 100vh;
+  }
+
+  /* ───────── BANDEAU DRAPEAU ───────── */
+  .flag-bar { display: flex; height: 6px; }
+  .flag-bar span { flex: 1; }
+  .flag-bar span:nth-child(1) { background: var(--rouge); }
+  .flag-bar span:nth-child(2) { background: var(--vert); }
+  .flag-bar span:nth-child(3) { background: var(--jaune); }
+
+  /* ───────── EN-TÊTE ───────── */
+  header {
+    background: linear-gradient(135deg, var(--vert) 0%, #0d3d24 100%);
+    color: var(--blanc);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '✦';
+    position: absolute; font-size: 18rem; opacity: 0.04;
+    top: -4rem; right: -4rem; line-height: 1;
+    color: var(--jaune);
+  }
+  header .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--jaune); margin-bottom: .6rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    line-height: 1.15; font-weight: 900;
+  }
+  header .subtitle { font-size: .95rem; opacity: .8; margin-top: .5rem; }
+
+  .signature-band {
+    background: var(--jaune);
+    color: var(--noir);
+    text-align: center;
+    padding: .5rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--vert);
+  }
+
+  /* ───────── INFOS / CONTRÔLES ───────── */
+  .controls {
+    max-width: 820px; margin: 1.6rem auto 0; padding: 0 1.2rem;
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+  }
+  .info-box {
+    background: var(--blanc); border-radius: 8px;
+    padding: .7rem 1.1rem;
+    border-left: 4px solid var(--vert);
+    font-size: .88rem; flex: 1; min-width: 180px;
+  }
+  .info-box strong { display: block; font-size: 1.5rem; color: var(--vert); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .65rem 1.4rem; border: none; border-radius: 6px;
+    font-family: 'Source Sans 3', sans-serif; font-size: .9rem; font-weight: 600;
+    cursor: pointer; transition: transform .12s, box-shadow .12s;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px var(--ombre); }
+  .btn-primary { background: var(--vert); color: var(--blanc); }
+  .btn-danger  { background: var(--rouge); color: var(--blanc); }
+  .btn-gold    { background: var(--jaune); color: var(--noir); }
+
+  /* ───────── PROGRESSION ───────── */
+  .progress-wrap { max-width: 820px; margin: 1rem auto 0; padding: 0 1.2rem; }
+  .progress-track {
+    height: 8px; background: var(--gris); border-radius: 99px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--vert), var(--jaune));
+    border-radius: 99px; transition: width .35s ease;
+    width: 0%;
+  }
+  .progress-label { font-size: .78rem; color: #666; margin-top: .35rem; text-align: right; }
+
+  /* ───────── CHRONO ───────── */
+  #chrono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--rouge); background: #fff0ee;
+    border: 1px solid #f5c0ba;
+    padding: .4rem .9rem; border-radius: 6px;
+  }
+
+  /* ───────── CONTENEUR QUESTIONS ───────── */
+  main { max-width: 820px; margin: 1.5rem auto 4rem; padding: 0 1.2rem; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--vert);
+    border-bottom: 2px solid var(--jaune);
+    padding-bottom: .4rem; margin: 2rem 0 1rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .section-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem; font-weight: 600;
+    background: var(--jaune); color: var(--noir);
+    padding: .15rem .55rem; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: .1em;
+  }
+
+  /* ───────── CARTE QUESTION ───────── */
+  .q-card {
+    background: var(--blanc);
+    border-radius: 10px;
+    border: 1.5px solid var(--gris);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: .9rem;
+    transition: border-color .2s;
+    position: relative;
+  }
+  .q-card:hover { border-color: #a8c8b8; }
+  .q-card.answered-correct { border-color: var(--vert); background: #f0faf4; }
+  .q-card.answered-wrong   { border-color: var(--rouge); background: #fff5f4; }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem; font-weight: 600; color: #999;
+    text-transform: uppercase; letter-spacing: .1em;
+    margin-bottom: .4rem;
+  }
+  .q-text {
+    font-size: .97rem; font-weight: 600; line-height: 1.45;
+    margin-bottom: .9rem;
+  }
+  .q-theme {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem; padding: .15rem .5rem;
+    border-radius: 3px; margin-bottom: .55rem;
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .theme-usa    { background: #ddeeff; color: #1a4a80; }
+  .theme-chine  { background: #ffe0e0; color: #8b0000; }
+  .theme-nigeria{ background: #e0f5e0; color: #1a5c1a; }
+  .theme-burkina{ background: #fff0cc; color: #7a5000; }
+  .theme-ter    { background: #e8e0ff; color: #3d1a80; }
+  .theme-sec    { background: #ffe8d0; color: #7a3500; }
+
+  /* Options QCM */
+  .options { display: grid; gap: .5rem; }
+  .opt {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .6rem .9rem; border-radius: 7px;
+    border: 1.5px solid var(--gris);
+    cursor: pointer; font-size: .9rem;
+    transition: background .15s, border-color .15s;
+    user-select: none;
+  }
+  .opt:hover:not(.locked) { background: #f0faf4; border-color: var(--vert); }
+  .opt.selected { background: #e8f5ee; border-color: var(--vert); }
+  .opt.correct  { background: #d4efdf; border-color: var(--vert); font-weight: 600; }
+  .opt.wrong    { background: #fde0de; border-color: var(--rouge); }
+  .opt.locked   { cursor: default; }
+  .opt-letter {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--gris); font-weight: 700;
+    font-family: 'JetBrains Mono', monospace; font-size: .78rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .opt.correct  .opt-letter { background: var(--vert); color: #fff; }
+  .opt.wrong    .opt-letter { background: var(--rouge); color: #fff; }
+
+  /* Vrai / Faux */
+  .vf-wrap { display: flex; gap: .7rem; }
+  .vf-btn {
+    flex: 1; padding: .65rem; border: 2px solid var(--gris);
+    border-radius: 8px; text-align: center; cursor: pointer;
+    font-weight: 700; font-size: .95rem;
+    transition: background .15s, border-color .15s;
+  }
+  .vf-btn:hover:not(.locked) { border-color: #aaa; background: #f5f5f5; }
+  .vf-btn.selected { border-color: var(--vert); background: #e8f5ee; }
+  .vf-btn.correct  { border-color: var(--vert); background: #d4efdf; color: var(--vert); }
+  .vf-btn.wrong    { border-color: var(--rouge); background: #fde0de; color: var(--rouge); }
+  .vf-btn.locked   { cursor: default; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: .7rem; font-size: .83rem;
+    padding: .5rem .8rem; border-radius: 5px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok  { background: #edf7f0; color: #155724; border-left: 3px solid var(--vert); }
+  .feedback.ko  { background: #fdf0ef; color: #721c24; border-left: 3px solid var(--rouge); }
+
+  /* ───────── RÉSULTAT FINAL ───────── */
+  #result-panel {
+    display: none; max-width: 820px; margin: 2rem auto;
+    padding: 0 1.2rem;
+  }
+  .result-card {
+    background: linear-gradient(135deg, var(--vert), #0d3d24);
+    color: #fff; border-radius: 14px;
+    padding: 2.5rem 2rem; text-align: center;
+  }
+  .result-card h2 { font-family: 'Playfair Display', serif; font-size: 2rem; }
+  .score-big { font-size: 4rem; font-weight: 900; color: var(--jaune); line-height: 1; margin: .8rem 0; }
+  .result-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; margin: 1.5rem 0;
+  }
+  .result-item { background: rgba(255,255,255,.12); border-radius: 8px; padding: .8rem; }
+  .result-item strong { display: block; font-size: 1.5rem; color: var(--jaune); }
+  .result-item span   { font-size: .8rem; opacity: .85; }
+  .mention { margin-top: .5rem; font-size: 1.1rem; font-style: italic; opacity: .9; }
+
+  /* ───────── RESPONSIVE ───────── */
+  @media(max-width:560px){
+    header { padding: 1.8rem 1rem 1.5rem; }
+    .result-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ───────── PRINT ───────── */
+  @media print {
+    .controls, .progress-wrap, #result-panel, .btn { display: none !important; }
+    .q-card { break-inside: avoid; border: 1px solid #ccc; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flag-bar">
+  <span></span><span></span><span></span>
+</div>
+
+<header>
+  <div class="label">République du Burkina Faso — Éducation Nationale</div>
+  <h1>Questionnaire d'Histoire-Géographie<br>Terminale A</h1>
+  <div class="subtitle">84 QCM &nbsp;·&nbsp; 42 Vrai ou Faux &nbsp;·&nbsp; 126 questions au total &nbsp;·&nbsp; Mélange aléatoire</div>
+</header>
+
+<div class="signature-band">© Par SAOUADOGO W E EPIPHANE — Tous droits réservés</div>
+
+<div class="controls">
+  <div class="info-box"><strong id="q-count">126</strong>Questions totales</div>
+  <div class="info-box"><strong id="score-live">0</strong>Score actuel</div>
+  <div class="info-box"><strong id="answered-count">0</strong>Répondues</div>
+  <div id="chrono">00:00</div>
+  <button class="btn btn-primary" onclick="shuffleAndStart()">🔀 Mélanger &amp; Commencer</button>
+  <button class="btn btn-danger"  onclick="resetQuiz()">↺ Réinitialiser</button>
+  <button class="btn btn-gold"    onclick="window.print()">🖨 Imprimer</button>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+  <div class="progress-label" id="prog-label">0 / 126 répondues</div>
+</div>
+
+<main id="quiz-main"></main>
+
+<div id="result-panel">
+  <div class="result-card">
+    <h2>🏆 Résultats Finaux</h2>
+    <div class="score-big" id="res-score">—</div>
+    <div>sur 126 points</div>
+    <div class="result-grid">
+      <div class="result-item"><strong id="res-correct">—</strong><span>Bonnes réponses</span></div>
+      <div class="result-item"><strong id="res-wrong">—</strong><span>Mauvaises réponses</span></div>
+      <div class="result-item"><strong id="res-time">—</strong><span>Temps total</span></div>
+    </div>
+    <div class="mention" id="res-mention"></div>
+    <br>
+    <small style="opacity:.7;font-size:.75rem;">© PAR SAOUADOGO W E EPIPHANE</small>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   BANQUE DE QUESTIONS
+   84 QCM + 42 VF = 126
+═══════════════════════════════════════════════════════ */
+
+const QCM = [
+  /* ── ÉTATS-UNIS (14 QCM) ── */
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quelle est la première puissance économique mondiale ?",
+   opts:["La Chine","Les États-Unis","L'Allemagne","Le Japon"], rep:1,
+   expl:"Les États-Unis restent la première puissance économique mondiale par le PIB nominal."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quel est le système politique des États-Unis ?",
+   opts:["Monarchie constitutionnelle","République fédérale","République unitaire","Confédération"], rep:1,
+   expl:"Les États-Unis sont une république fédérale composée de 50 États."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quelle est la mégalopole la plus connue des États-Unis ?",
+   opts:["Texas Corridor","Sun Belt","Boswash (Boston-Washington)","Great Lakes Megalopolis"], rep:2,
+   expl:"La Boswash, de Boston à Washington, est la mégalopole la plus célèbre et la plus peuplée des États-Unis."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quel fleuve sépare les États-Unis du Mexique à l'ouest du Texas ?",
+   opts:["Colorado","Missouri","Rio Grande","Mississippi"], rep:2,
+   expl:"Le Rio Grande forme la frontière naturelle entre le Texas et le Mexique."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Silicon Valley, centre mondial des hautes technologies, se trouve dans quel État ?",
+   opts:["New York","Texas","Floride","Californie"], rep:3,
+   expl:"La Silicon Valley est située en Californie, près de San Francisco."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quelle organisation internationale a son siège à New York ?",
+   opts:["FMI","OMS","ONU","OMC"], rep:2,
+   expl:"Le siège de l'ONU (Organisation des Nations Unies) est à New York."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"La 'Sun Belt' désigne quelle région des États-Unis ?",
+   opts:["Nord-est industriel","Ceinture du Soleil au Sud","Grandes Plaines centrales","Côte Pacifique"], rep:1,
+   expl:"La Sun Belt est la ceinture ensoleillée du sud des États-Unis, en plein essor économique et démographique."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quelle est la monnaie des États-Unis ?",
+   opts:["Euro","Livre sterling","Dollar","Yen"], rep:2,
+   expl:"La monnaie nationale des États-Unis est le dollar américain (USD)."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quelle ville est considérée comme la capitale financière des États-Unis ?",
+   opts:["Los Angeles","Chicago","Washington D.C.","New York"], rep:3,
+   expl:"New York, notamment Wall Street, est la capitale financière des États-Unis."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quel est le principal port de la côte est des États-Unis ?",
+   opts:["Miami","New York","Boston","Baltimore"], rep:1,
+   expl:"New York est le principal port de commerce de la côte est."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"De combien d'États est composée la fédération américaine ?",
+   opts:["48","49","51","50"], rep:3,
+   expl:"Les États-Unis sont composés de 50 États, auxquels s'ajoute le District of Columbia."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Le PIB par habitant des États-Unis fait partie des plus élevés car :",
+   opts:["Le pays est peu peuplé","Il dispose de ressources naturelles et d'une haute productivité","Il n'a pas de dette","Son territoire est le plus grand du monde"], rep:1,
+   expl:"Les États-Unis combinent ressources naturelles abondantes et très forte productivité du travail."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quelle est la principale culture commerciale du Middle West américain ?",
+   opts:["Café","Cacao","Coton","Maïs et soja"], rep:3,
+   expl:"Le Middle West est le 'grenier à céréales' des États-Unis, dominé par le maïs et le soja."},
+
+  {type:"qcm", theme:"usa", themeLabel:"États-Unis",
+   q:"Quel accord de libre-échange liait les États-Unis, le Canada et le Mexique (remplacé en 2020) ?",
+   opts:["CEDEAO","MERCOSUR","ALENA / NAFTA","ASEAN"], rep:2,
+   expl:"L'ALENA (NAFTA en anglais) a été remplacé par l'ACEUM (USMCA) en juillet 2020."},
+
+  /* ── SECTEUR TERTIAIRE (14 QCM) ── */
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Le secteur tertiaire regroupe principalement :",
+   opts:["L'agriculture et l'élevage","L'industrie et l'artisanat","Les services","Les mines et carrières"], rep:2,
+   expl:"Le secteur tertiaire regroupe toutes les activités de service : commerce, transports, tourisme, finance, éducation, santé…"},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Parmi ces activités, laquelle appartient au secteur tertiaire ?",
+   opts:["Extraction minière","Fabrication automobile","Transport aérien","Agriculture intensive"], rep:2,
+   expl:"Le transport aérien est une activité de service classée dans le secteur tertiaire."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Le tourisme est une composante importante du secteur tertiaire car il génère :",
+   opts:["Des minerais","Des devises et des emplois","Des produits manufacturés","Des céréales"], rep:1,
+   expl:"Le tourisme génère des entrées de devises étrangères et crée de nombreux emplois locaux."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Dans les pays développés, quelle part de la population active travaille dans le tertiaire ?",
+   opts:["Moins de 20 %","Entre 20 et 40 %","Plus de 70 %","Exactement 50 %"], rep:2,
+   expl:"Dans les pays développés, plus de 70 % des actifs travaillent dans les services."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Le commerce international est favorisé par :",
+   opts:["Les barrières douanières","La libéralisation des échanges et l'OMC","Les embargos","L'autarcie"], rep:1,
+   expl:"L'OMC œuvre pour la libéralisation des échanges, ce qui facilite le commerce international."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Quelle institution mondiale s'occupe du commerce international ?",
+   opts:["UNESCO","FMI","OMC","OMS"], rep:2,
+   expl:"L'OMC (Organisation Mondiale du Commerce) régule les règles du commerce international."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Le e-commerce (commerce électronique) fait partie :",
+   opts:["Du secteur primaire","Du secteur secondaire","Du secteur tertiaire","Du secteur quaternaire uniquement"], rep:2,
+   expl:"Le commerce électronique est une forme moderne du commerce, activité du secteur tertiaire."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Quelle ville est considérée comme la principale place financière mondiale ?",
+   opts:["Tokyo","Paris","New York","Dubaï"], rep:2,
+   expl:"New York, avec Wall Street, est la principale place financière mondiale."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Quel indice mesure le développement humain en tenant compte de l'éducation et de la santé ?",
+   opts:["PIB","PNB","IDH","IPC"], rep:2,
+   expl:"L'IDH (Indice de Développement Humain) du PNUD mesure le développement à travers l'éducation, la santé et le revenu."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"La téléphonie mobile au Burkina Faso appartient à quel secteur ?",
+   opts:["Primaire","Secondaire","Tertiaire","Quaternaire"], rep:2,
+   expl:"La téléphonie est un service, donc appartient au secteur tertiaire."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Lequel de ces pays est considéré comme la première destination touristique mondiale ?",
+   opts:["Espagne","États-Unis","France","Chine"], rep:2,
+   expl:"La France accueille régulièrement le plus grand nombre de touristes étrangers dans le monde."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"La Banque Mondiale a son siège dans quelle ville ?",
+   opts:["New York","Genève","Washington D.C.","Londres"], rep:2,
+   expl:"Le siège de la Banque Mondiale est à Washington D.C., aux États-Unis."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Quel type de service est en forte croissance dans les pays en développement comme le Burkina Faso ?",
+   opts:["Transport maritime","Tourisme de luxe","Microfinance et mobile money","Assurance vie"], rep:2,
+   expl:"La microfinance et le mobile money connaissent une forte expansion dans les pays en développement."},
+
+  {type:"qcm", theme:"ter", themeLabel:"Secteur tertiaire",
+   q:"Le secteur informel en Afrique appartient principalement à quel secteur d'activité ?",
+   opts:["Secondaire","Tertiaire","Primaire","Quaternaire"], rep:1,
+   expl:"Le secteur informel africain est surtout composé de petits commerces et services non déclarés (tertiaire)."},
+
+  /* ── SECTEUR SECONDAIRE (14 QCM) ── */
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Le secteur secondaire correspond à :",
+   opts:["L'agriculture et la pêche","Les industries de transformation","Les services","L'administration publique"], rep:1,
+   expl:"Le secteur secondaire regroupe toutes les activités de transformation des matières premières en produits finis."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"L'industrie textile est classée dans :",
+   opts:["Le secteur primaire","Le secteur secondaire","Le secteur tertiaire","Le secteur informel"], rep:1,
+   expl:"L'industrie textile transforme des fibres (coton, laine…) en vêtements : c'est le secteur secondaire."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"La révolution industrielle est née au XVIIIe siècle dans quel pays ?",
+   opts:["France","Allemagne","Angleterre","États-Unis"], rep:2,
+   expl:"La révolution industrielle a débuté en Angleterre vers 1760 avec la machine à vapeur."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Quel est le principal avantage de la délocalisation industrielle pour les pays développés ?",
+   opts:["Améliorer la qualité des produits","Réduire les coûts de production","Augmenter les taxes","Créer des emplois locaux"], rep:1,
+   expl:"La délocalisation permet de réduire les coûts de production en exploitant une main-d'œuvre moins chère."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"La sidérurgie est une industrie qui traite :",
+   opts:["Le bois","Les textiles","Le fer et l'acier","Le pétrole"], rep:2,
+   expl:"La sidérurgie est la métallurgie du fer et de l'acier, industrie lourde du secteur secondaire."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Quel pays est le premier producteur mondial d'acier ?",
+   opts:["Japon","Allemagne","Inde","Chine"], rep:3,
+   expl:"La Chine produit plus de la moitié de l'acier mondial, loin devant l'Inde et le Japon."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"L'industrie agroalimentaire transforme :",
+   opts:["Des métaux","Des produits agricoles en aliments","Du pétrole","Du bois en papier"], rep:1,
+   expl:"L'industrie agroalimentaire (IAA) transforme les produits agricoles bruts en aliments prêts à consommer."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Quel type d'énergie est le plus utilisé dans les industries mondiales ?",
+   opts:["Énergie solaire","Énergie hydraulique","Énergie éolienne","Énergie fossile (pétrole, gaz, charbon)"], rep:3,
+   expl:"Les énergies fossiles (pétrole, gaz naturel, charbon) dominent encore la consommation industrielle mondiale."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Le BTP (Bâtiment et Travaux Publics) appartient à quel secteur ?",
+   opts:["Secteur primaire","Secteur secondaire","Secteur tertiaire","Secteur informel"], rep:1,
+   expl:"Le BTP est une activité de transformation et construction, donc appartient au secteur secondaire."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Au Burkina Faso, quelle est la principale industrie de transformation ?",
+   opts:["Sidérurgie","Industrie pharmaceutique","Industrie agroalimentaire (coton, karité)","Industrie automobile"], rep:2,
+   expl:"L'industrie agroalimentaire, notamment la transformation du coton et du karité, est dominante au Burkina Faso."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"La zone industrielle de Kossodo se trouve dans quelle ville du Burkina Faso ?",
+   opts:["Bobo-Dioulasso","Koudougou","Ouagadougou","Banfora"], rep:2,
+   expl:"La zone industrielle de Kossodo est située à Ouagadougou, la capitale économique et politique."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Quel est le rôle de la SONABHY au Burkina Faso ?",
+   opts:["Gérer l'eau potable","Assurer l'approvisionnement en hydrocarbures","Produire de l'électricité","Construire des routes"], rep:1,
+   expl:"La SONABHY (Société Nationale Burkinabè des Hydrocarbures) assure l'approvisionnement en carburant du pays."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"La production industrielle en Afrique sub-saharienne est globalement :",
+   opts:["La plus forte du monde","Dominée par les industries légères et agroalimentaires","Axée sur l'industrie lourde","Inexistante"], rep:1,
+   expl:"L'industrie d'Afrique subsaharienne est surtout composée d'industries légères (agro-alimentaire, textile)."},
+
+  {type:"qcm", theme:"sec", themeLabel:"Secteur secondaire",
+   q:"Quel secteur est moteur du développement économique de la Chine depuis les années 1980 ?",
+   opts:["L'agriculture","Le tourisme","L'industrie (secteur secondaire)","La finance"], rep:2,
+   expl:"La Chine a basé sa croissance spectaculaire sur l'industrialisation massive depuis les réformes de 1978."},
+
+  /* ── CHINE (14 QCM) ── */
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"La Chine est le pays le plus peuplé du monde avec environ :",
+   opts:["800 millions d'habitants","1,4 milliard d'habitants","2 milliards d'habitants","500 millions d'habitants"], rep:1,
+   expl:"La Chine compte environ 1,4 milliard d'habitants, bien qu'elle soit concurrencée par l'Inde."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Quel est le régime politique de la Chine ?",
+   opts:["Démocratie libérale","Monarchie constitutionnelle","République populaire à parti unique","Fédération"], rep:2,
+   expl:"La Chine est une République populaire dirigée par le Parti communiste chinois (PCC)."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"La politique 'un enfant par famille' en Chine avait pour objectif :",
+   opts:["Augmenter la natalité","Freiner la croissance démographique","Favoriser l'immigration","Réduire la mortalité"], rep:1,
+   expl:"Cette politique (1979-2015) visait à limiter l'explosion démographique en Chine."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Quel est le fleuve le plus long de Chine ?",
+   opts:["Fleuve Jaune (Huang He)","Mékong","Amour","Yangtsé (Chang Jiang)"], rep:3,
+   expl:"Le Yangtsé (Chang Jiang) est le fleuve le plus long de Chine avec environ 6 300 km."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Le 'dragon économique' chinois s'est développé grâce à :",
+   opts:["L'aide extérieure exclusive","L'ouverture économique et les réformes de Deng Xiaoping","Les richesses pétrolières","L'autarcie"], rep:1,
+   expl:"Deng Xiaoping a lancé les réformes d'ouverture économique en 1978, transformant la Chine en puissance mondiale."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Les 'zones économiques spéciales' (ZES) chinoises sont :",
+   opts:["Des zones militaires","Des zones agricoles réservées","Des espaces d'économie de marché ouverts aux investisseurs","Des réserves naturelles"], rep:2,
+   expl:"Les ZES (comme Shenzhen) sont des espaces où les lois du marché s'appliquent pour attirer les investisseurs étrangers."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"La Chine est aujourd'hui classée au rang :",
+   opts:["3e puissance économique mondiale","5e puissance économique mondiale","2e puissance économique mondiale","1ère puissance économique mondiale"], rep:2,
+   expl:"La Chine est la 2e puissance économique mondiale par le PIB nominal, derrière les États-Unis."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"La 'route de la soie' (Belt and Road Initiative) est un projet chinois visant à :",
+   opts:["Construire le plus long mur du monde","Relier la Chine à l'Europe et l'Afrique par des routes et ports","Défendre les frontières chinoises","Exporter uniquement vers les États-Unis"], rep:1,
+   expl:"La BRI est un projet d'infrastructures qui relie la Chine à l'Europe, l'Asie et l'Afrique."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"La Chine est le premier producteur mondial de :",
+   opts:["Pétrole","Blé uniquement","Nombreux produits manufacturés et matières premières (acier, coton, riz…)","Or"], rep:2,
+   expl:"La Chine est premier producteur mondial de nombreux biens : acier, ciment, coton, riz, électronique, etc."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Quelle ville est la capitale de la Chine ?",
+   opts:["Shanghai","Pékin (Beijing)","Hong Kong","Guangzhou"], rep:1,
+   expl:"Pékin (Beijing) est la capitale politique de la République populaire de Chine."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Le port de Shanghai est classé :",
+   opts:["1er port mondial","5e port mondial","15e port mondial","3e port mondial"], rep:0,
+   expl:"Shanghai est le premier port mondial en volume de conteneurs traités."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"La Chine est présente en Afrique principalement pour :",
+   opts:["Exporter ses travailleurs","Investir dans les infrastructures et exploiter les ressources naturelles","Coloniser les pays","Apporter une aide humanitaire exclusive"], rep:1,
+   expl:"La Chine investit massivement en Afrique (routes, ports, mines) en échange de ressources naturelles."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Quel est le principal défi démographique actuel de la Chine ?",
+   opts:["Surpopulation ingérable","Vieillissement de la population","Forte mortalité infantile","Épidémies fréquentes"], rep:1,
+   expl:"Suite à la politique de l'enfant unique, la Chine connaît un vieillissement rapide de sa population."},
+
+  {type:"qcm", theme:"chine", themeLabel:"Chine",
+   q:"Hong Kong est :",
+   opts:["Un État indépendant","Une province autonome sous souveraineté chinoise","Une colonie britannique","Une ville japonaise"], rep:1,
+   expl:"Hong Kong est une Région Administrative Spéciale (RAS) sous souveraineté de la Chine depuis 1997."},
+
+  /* ── NIGERIA (14 QCM) ── */
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Le Nigeria est la première puissance économique d'Afrique. Sa richesse repose principalement sur :",
+   opts:["L'agriculture vivrière","Le tourisme","Le pétrole","L'industrie textile"], rep:2,
+   expl:"Le Nigeria est le premier producteur de pétrole en Afrique, ressource qui constitue la base de son économie."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Quelle est la capitale fédérale du Nigeria ?",
+   opts:["Lagos","Kano","Abuja","Port Harcourt"], rep:2,
+   expl:"Abuja est la capitale fédérale du Nigeria depuis 1991 (construite pour remplacer Lagos)."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Quelle est la plus grande ville du Nigeria et d'Afrique subsaharienne ?",
+   opts:["Abuja","Kano","Ibadan","Lagos"], rep:3,
+   expl:"Lagos est la plus grande métropole du Nigeria et l'une des plus grandes villes d'Afrique."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Le Nigeria appartient à quelle organisation régionale africaine ?",
+   opts:["SADC","UA uniquement","CEDEAO","COMESA"], rep:2,
+   expl:"Le Nigeria est membre de la CEDEAO (Communauté Économique des États de l'Afrique de l'Ouest)."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"La population du Nigeria est estimée à environ :",
+   opts:["50 millions","100 millions","220 millions","500 millions"], rep:2,
+   expl:"Le Nigeria est le pays le plus peuplé d'Afrique avec environ 220 millions d'habitants."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Quelle religion domine dans le nord du Nigeria ?",
+   opts:["Christianisme","Animisme","Islam","Bouddhisme"], rep:2,
+   expl:"Le nord du Nigeria est majoritairement musulman, tandis que le sud est majoritairement chrétien."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Le Delta du Niger au Nigeria est connu pour :",
+   opts:["Sa biodiversité forestière unique","Ses sites touristiques","Sa production pétrolière et les conflits liés","Ses cultures de cacao"], rep:2,
+   expl:"Le Delta du Niger est la principale zone d'extraction pétrolière, mais aussi un foyer de tensions environnementales et sociales."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Quelle est la principale culture de rente du Nigeria ?",
+   opts:["Le café","Le cacao","Le coton","Le maïs"], rep:1,
+   expl:"Le cacao est la principale culture d'exportation non-pétrolière du Nigeria."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Le Nollywood désigne :",
+   opts:["Un parc national nigérian","L'industrie cinématographique nigériane","Un quartier de Lagos","Une plateforme pétrolière"], rep:1,
+   expl:"Nollywood est l'industrie du cinéma nigérian, l'une des plus grandes du monde par volume de production."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Le Nigeria a obtenu son indépendance en :",
+   opts:["1958","1963","1960","1956"], rep:2,
+   expl:"Le Nigeria a accédé à l'indépendance le 1er octobre 1960, sous tutelle britannique."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Quel grand problème affecte l'économie nigériane malgré ses richesses pétrolières ?",
+   opts:["Manque d'eau","Corruption et mauvaise gouvernance","Manque de ressources naturelles","Faible démographie"], rep:1,
+   expl:"La corruption et la mauvaise gouvernance sont les principaux freins au développement du Nigeria."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Le groupe islamiste armé actif dans le nord du Nigeria s'appelle :",
+   opts:["Al-Qaïda","AQMI","Boko Haram","Al-Shabaab"], rep:2,
+   expl:"Boko Haram est le groupe djihadiste qui sème la violence dans le nord-est du Nigeria depuis 2009."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"La monnaie du Nigeria est :",
+   opts:["Franc CFA","Cedi","Naira","Shilling"], rep:2,
+   expl:"La monnaie nationale du Nigeria est le naira (NGN)."},
+
+  {type:"qcm", theme:"nigeria", themeLabel:"Nigeria",
+   q:"Le Nigeria fait partie de l'OPEP. Qu'est-ce que l'OPEP ?",
+   opts:["Organisation des Pays Exportateurs de Produits agricoles","Organisation des Pays Exportateurs de Pétrole","Organisation Pan-Africaine d'Entraide Pétrolière","Organisation des Peuples et États Pétroliers"], rep:1,
+   expl:"L'OPEP (Organisation des Pays Exportateurs de Pétrole) regroupe les principaux pays exportateurs de pétrole."},
+
+  /* ── BURKINA FASO (14 QCM) ── */
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Quelle est la capitale du Burkina Faso ?",
+   opts:["Bobo-Dioulasso","Koudougou","Ouahigouya","Ouagadougou"], rep:3,
+   expl:"Ouagadougou est la capitale politique et économique du Burkina Faso."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Quelle est la principale culture de rente du Burkina Faso ?",
+   opts:["Café","Coton","Cacao","Riz"], rep:1,
+   expl:"Le coton est la principale culture d'exportation et de rente du Burkina Faso."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Le Burkina Faso est un pays :",
+   opts:["Côtier et riche en pétrole","Enclavé sans accès à la mer","Insulaire","Semi-côtier"], rep:1,
+   expl:"Le Burkina Faso est un pays enclavé d'Afrique de l'Ouest, sans accès direct à la mer."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"L'économie burkinabè repose principalement sur :",
+   opts:["L'industrie lourde","L'agriculture et l'élevage","Le tourisme de masse","L'exploitation pétrolière"], rep:1,
+   expl:"L'agriculture et l'élevage constituent la base de l'économie burkinabè, employant plus de 80 % de la population active."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Le FESPACO est :",
+   opts:["Un parti politique burkinabè","Un festival de cinéma panafricain à Ouagadougou","Une entreprise minière","Une organisation régionale"], rep:1,
+   expl:"Le FESPACO (Festival Panafricain du Cinéma et de la Télévision de Ouagadougou) est le plus grand festival de cinéma d'Afrique."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Quel est le principal défi climatique du Burkina Faso ?",
+   opts:["Les cyclones tropicaux","La désertification et la sécheresse","Les inondations permanentes","Le froid hivernal"], rep:1,
+   expl:"La désertification, avancée du Sahara et la sécheresse récurrente menacent l'agriculture burkinabè."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Quelle est la deuxième ville du Burkina Faso ?",
+   opts:["Koudougou","Ouahigouya","Banfora","Bobo-Dioulasso"], rep:3,
+   expl:"Bobo-Dioulasso est la deuxième ville du Burkina Faso et son principal centre industriel."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Le Burkina Faso fait partie de quelle zone monétaire ?",
+   opts:["Zone dollar","Zone sterling","Zone franc CFA (UEMOA)","Zone euro"], rep:2,
+   expl:"Le Burkina Faso utilise le franc CFA (XOF) et fait partie de l'UEMOA (Union Économique et Monétaire Ouest-Africaine)."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Quel fleuve traverse le Burkina Faso et irrigue ses plaines centrales ?",
+   opts:["Niger","Comoé","Volta (Mouhoun, Nakambé, Nazinon)","Bandama"], rep:2,
+   expl:"Les fleuves Volta (Mouhoun=Volta Noire, Nakambé=Volta Blanche, Nazinon=Volta Rouge) traversent le Burkina Faso."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"La principale ressource minière exportée par le Burkina Faso est :",
+   opts:["Le pétrole","Le diamant","Le zinc","L'or"], rep:3,
+   expl:"L'or est devenu la première ressource d'exportation du Burkina Faso, devant le coton."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"En quelle année le Burkina Faso a-t-il obtenu son indépendance ?",
+   opts:["1960","1962","1965","1958"], rep:0,
+   expl:"La Haute-Volta (Burkina Faso) a accédé à l'indépendance le 5 août 1960."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Le Plan National de Développement Économique et Social (PNDES) au Burkina Faso visait :",
+   opts:["L'industrialisation lourde","La transformation structurelle de l'économie","L'arrêt de l'agriculture","L'exportation de main-d'œuvre"], rep:1,
+   expl:"Le PNDES visait la transformation structurelle de l'économie burkinabè pour une croissance inclusive et durable."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"La Société des Fibres et Textiles (SOFITEX) au Burkina Faso est liée à :",
+   opts:["La production d'or","L'industrie du coton","L'exploitation du zinc","Le tourisme"], rep:1,
+   expl:"La SOFITEX est la principale société d'égrenage du coton au Burkina Faso."},
+
+  {type:"qcm", theme:"burkina", themeLabel:"Burkina Faso",
+   q:"Le groupe ethnique le plus nombreux au Burkina Faso est :",
+   opts:["Les Peuls","Les Dioulas","Les Mossi","Les Gourounsi"], rep:2,
+   expl:"Les Mossi représentent environ 50 % de la population burkinabè et constituent le groupe ethnique le plus important."},
+];
+
+/* ══════════════════════════════════════════════
+   42 VRAI OU FAUX
+══════════════════════════════════════════════ */
+const VF = [
+  /* États-Unis (7 VF) */
+  {type:"vf",theme:"usa",themeLabel:"États-Unis",
+   q:"Les États-Unis sont le premier émetteur mondial de gaz à effet de serre de tous les temps.",
+   rep:true, expl:"Les États-Unis sont historiquement le premier émetteur cumulé de CO2, bien que la Chine les ait dépassés annuellement."},
+  {type:"vf",theme:"usa",themeLabel:"États-Unis",
+   q:"Washington D.C. est la capitale politique des États-Unis.",
+   rep:true, expl:"Washington D.C. est la capitale fédérale et le siège du gouvernement américain."},
+  {type:"vf",theme:"usa",themeLabel:"États-Unis",
+   q:"Le Mississippi est le fleuve le plus long des États-Unis.",
+   rep:false, expl:"Le Missouri est le fleuve le plus long ; le Mississippi-Missouri forme le système fluvial le plus étendu."},
+  {type:"vf",theme:"usa",themeLabel:"États-Unis",
+   q:"Les États-Unis sont membres de l'OTAN.",
+   rep:true, expl:"Les États-Unis sont l'un des membres fondateurs de l'OTAN (1949)."},
+  {type:"vf",theme:"usa",themeLabel:"États-Unis",
+   q:"La NASA est une agence spatiale privée américaine.",
+   rep:false, expl:"La NASA (National Aeronautics and Space Administration) est une agence gouvernementale fédérale."},
+  {type:"vf",theme:"usa",themeLabel:"États-Unis",
+   q:"Los Angeles est la capitale de la Californie.",
+   rep:false, expl:"La capitale de la Californie est Sacramento. Los Angeles est la plus grande ville de l'État."},
+  {type:"vf",theme:"usa",themeLabel:"États-Unis",
+   q:"La Rust Belt désigne les anciennes régions industrielles en déclin du nord-est des États-Unis.",
+   rep:true, expl:"La Rust Belt (ceinture de rouille) correspond aux anciennes zones industrielles comme Detroit, Pittsburgh, Cleveland."},
+
+  /* Secteur tertiaire (7 VF) */
+  {type:"vf",theme:"ter",themeLabel:"Secteur tertiaire",
+   q:"L'enseignement est une activité du secteur tertiaire.",
+   rep:true, expl:"L'enseignement est un service et appartient donc au secteur tertiaire."},
+  {type:"vf",theme:"ter",themeLabel:"Secteur tertiaire",
+   q:"Le secteur tertiaire est le moins développé dans les pays riches.",
+   rep:false, expl:"C'est l'inverse : dans les pays développés, le tertiaire emploie plus de 70 % des actifs."},
+  {type:"vf",theme:"ter",themeLabel:"Secteur tertiaire",
+   q:"Le commerce est classé dans le secteur secondaire.",
+   rep:false, expl:"Le commerce est une activité de service, il appartient au secteur tertiaire."},
+  {type:"vf",theme:"ter",themeLabel:"Secteur tertiaire",
+   q:"Le secteur quaternaire regroupe les activités à très forte intensité de savoir (recherche, numérique).",
+   rep:true, expl:"Le secteur quaternaire, parfois distingué du tertiaire, désigne les activités liées à la connaissance et à l'information."},
+  {type:"vf",theme:"ter",themeLabel:"Secteur tertiaire",
+   q:"Le FMI accorde des prêts aux pays en difficulté financière.",
+   rep:true, expl:"Le Fonds Monétaire International aide les pays en difficulté de balance des paiements en leur accordant des crédits."},
+  {type:"vf",theme:"ter",themeLabel:"Secteur tertiaire",
+   q:"La France est parmi les premières destinations touristiques mondiales.",
+   rep:true, expl:"La France reçoit régulièrement plus de 80 millions de touristes étrangers par an, ce qui en fait la 1re destination mondiale."},
+  {type:"vf",theme:"ter",themeLabel:"Secteur tertiaire",
+   q:"Les activités de santé et d'hôpital appartiennent au secteur primaire.",
+   rep:false, expl:"La santé est un service ; elle appartient donc au secteur tertiaire."},
+
+  /* Secteur secondaire (7 VF) */
+  {type:"vf",theme:"sec",themeLabel:"Secteur secondaire",
+   q:"La construction de routes appartient au secteur secondaire.",
+   rep:true, expl:"Le BTP (Bâtiment et Travaux Publics) fait partie du secteur secondaire car il transforme des matières premières."},
+  {type:"vf",theme:"sec",themeLabel:"Secteur secondaire",
+   q:"L'industrie manufacturière transforme des matières premières en produits finis.",
+   rep:true, expl:"C'est la définition même du secteur secondaire : transformer des matières premières."},
+  {type:"vf",theme:"sec",themeLabel:"Secteur secondaire",
+   q:"Le secteur secondaire emploie la majorité des actifs au Burkina Faso.",
+   rep:false, expl:"Au Burkina Faso, c'est le secteur primaire (agriculture) qui emploie la majorité de la population active."},
+  {type:"vf",theme:"sec",themeLabel:"Secteur secondaire",
+   q:"L'énergie nucléaire est utilisée dans le secteur industriel de certains pays.",
+   rep:true, expl:"Des pays comme la France utilisent l'énergie nucléaire pour produire de l'électricité destinée notamment à l'industrie."},
+  {type:"vf",theme:"sec",themeLabel:"Secteur secondaire",
+   q:"La désindustrialisation touche surtout les pays en développement.",
+   rep:false, expl:"La désindustrialisation touche surtout les pays développés (Europe, États-Unis) qui délocalisent leurs usines."},
+  {type:"vf",theme:"sec",themeLabel:"Secteur secondaire",
+   q:"L'industrie du ciment appartient au secteur secondaire.",
+   rep:true, expl:"La fabrication de ciment est une industrie de transformation : secteur secondaire."},
+  {type:"vf",theme:"sec",themeLabel:"Secteur secondaire",
+   q:"La ZATU (Zone Artisanale de Ouagadougou) relève uniquement du secteur tertiaire.",
+   rep:false, expl:"L'artisanat de transformation (menuiserie, forge, couture…) relève du secteur secondaire, pas uniquement du tertiaire."},
+
+  /* Chine (7 VF) */
+  {type:"vf",theme:"chine",themeLabel:"Chine",
+   q:"La Chine est le deuxième pays le plus peuplé du monde.",
+   rep:false, expl:"La Chine a longtemps été le pays le plus peuplé, mais l'Inde l'a dépassée. Elle est désormais 2e."},
+  {type:"vf",theme:"chine",themeLabel:"Chine",
+   q:"Taïwan est reconnue par la Chine comme une province rebelle.",
+   rep:true, expl:"La Chine considère Taïwan comme une province et revendique sa souveraineté dessus."},
+  {type:"vf",theme:"chine",themeLabel:"Chine",
+   q:"La Grande Muraille de Chine est visible à l'œil nu depuis la Lune.",
+   rep:false, expl:"C'est un mythe : la Grande Muraille n'est pas visible à l'œil nu depuis l'espace."},
+  {type:"vf",theme:"chine",themeLabel:"Chine",
+   q:"Shenzhen était une petite ville de pêcheurs avant de devenir une mégapole grâce aux réformes économiques.",
+   rep:true, expl:"Shenzhen a été transformée en une des premières zones économiques spéciales (ZES) en 1980."},
+  {type:"vf",theme:"chine",themeLabel:"Chine",
+   q:"La Chine est membre permanent du Conseil de sécurité de l'ONU.",
+   rep:true, expl:"La Chine est l'un des 5 membres permanents du Conseil de sécurité de l'ONU (avec USA, Russie, France, UK)."},
+  {type:"vf",theme:"chine",themeLabel:"Chine",
+   q:"Le mandarin est la seule langue parlée en Chine.",
+   rep:false, expl:"Le mandarin est la langue officielle, mais la Chine compte des dizaines d'autres langues et dialectes."},
+  {type:"vf",theme:"chine",themeLabel:"Chine",
+   q:"La Chine est le plus grand marché automobile mondial.",
+   rep:true, expl:"La Chine est le premier marché mondial pour la vente d'automobiles depuis plusieurs années."},
+
+  /* Nigeria (7 VF) */
+  {type:"vf",theme:"nigeria",themeLabel:"Nigeria",
+   q:"Le Nigeria est le pays le plus peuplé d'Afrique.",
+   rep:true, expl:"Avec plus de 220 millions d'habitants, le Nigeria est de loin le pays le plus peuplé du continent africain."},
+  {type:"vf",theme:"nigeria",themeLabel:"Nigeria",
+   q:"Le Nigeria est un pays sans ressources pétrolières.",
+   rep:false, expl:"Le Nigeria est au contraire le premier producteur de pétrole d'Afrique."},
+  {type:"vf",theme:"nigeria",themeLabel:"Nigeria",
+   q:"Abuja a remplacé Lagos comme capitale fédérale du Nigeria en 1991.",
+   rep:true, expl:"Le Nigeria a déplacé sa capitale de Lagos à Abuja en décembre 1991 pour des raisons géographiques et politiques."},
+  {type:"vf",theme:"nigeria",themeLabel:"Nigeria",
+   q:"Le Nigeria partage une frontière avec le Burkina Faso.",
+   rep:false, expl:"Le Nigeria ne partage pas de frontière avec le Burkina Faso ; ses voisins sont le Niger, le Bénin, le Cameroun et le Tchad."},
+  {type:"vf",theme:"nigeria",themeLabel:"Nigeria",
+   q:"L'anglais est la langue officielle du Nigeria.",
+   rep:true, expl:"L'anglais est la langue officielle du Nigeria, héritage de la colonisation britannique."},
+  {type:"vf",theme:"nigeria",themeLabel:"Nigeria",
+   q:"Le lac Tchad se trouve entièrement au Nigeria.",
+   rep:false, expl:"Le lac Tchad est partagé entre le Nigeria, le Niger, le Cameroun et le Tchad."},
+  {type:"vf",theme:"nigeria",themeLabel:"Nigeria",
+   q:"Lagos est un important centre financier et commercial d'Afrique.",
+   rep:true, expl:"Lagos est la plus grande place financière et économique d'Afrique subsaharienne."},
+
+  /* Burkina Faso (7 VF) */
+  {type:"vf",theme:"burkina",themeLabel:"Burkina Faso",
+   q:"Le Burkina Faso est entouré par six pays voisins.",
+   rep:true, expl:"Le Burkina Faso est entouré par le Mali, le Niger, le Bénin, le Togo, le Ghana et la Côte d'Ivoire."},
+  {type:"vf",theme:"burkina",themeLabel:"Burkina Faso",
+   q:"L'ancien nom du Burkina Faso était la Haute-Volta.",
+   rep:true, expl:"Le pays s'appelait Haute-Volta jusqu'en 1984, quand Thomas Sankara lui a donné le nom de Burkina Faso."},
+  {type:"vf",theme:"burkina",themeLabel:"Burkina Faso",
+   q:"Le coton est la seule ressource exportée par le Burkina Faso.",
+   rep:false, expl:"Le Burkina Faso exporte aussi de l'or (devenu la 1re exportation), du zinc, des noix de karité…"},
+  {type:"vf",theme:"burkina",themeLabel:"Burkina Faso",
+   q:"Ouagadougou et Bobo-Dioulasso sont les deux principales villes du Burkina Faso.",
+   rep:true, expl:"Ouagadougou (capitale) et Bobo-Dioulasso (2e ville) concentrent l'essentiel de l'activité économique."},
+  {type:"vf",theme:"burkina",themeLabel:"Burkina Faso",
+   q:"Le français est la seule langue nationale officielle du Burkina Faso.",
+   rep:false, expl:"Le français est la langue officielle, mais le Burkina Faso reconnaît plusieurs langues nationales dont le mooré, le dioula et le fulfuldé."},
+  {type:"vf",theme:"burkina",themeLabel:"Burkina Faso",
+   q:"Le Burkina Faso est classé parmi les pays les moins avancés (PMA) du monde.",
+   rep:true, expl:"Le Burkina Faso figure sur la liste des Pays les Moins Avancés établie par l'ONU."},
+  {type:"vf",theme:"burkina",themeLabel:"Burkina Faso",
+   q:"Thomas Sankara a renommé la Haute-Volta en Burkina Faso, signifiant 'Pays des hommes intègres'.",
+   rep:true, expl:"Thomas Sankara a rebaptisé le pays Burkina Faso le 4 août 1984 : 'Burkina' = intégrité (mooré), 'Faso' = patrie (dioula)."},
+];
+
+/* ══════════════════════════════════
+   ÉTAT GLOBAL
+══════════════════════════════════ */
+let questions = [];
+let scores = {};
+let timerInterval = null;
+let secondsElapsed = 0;
+let answered = 0;
+let correct = 0;
+
+/* ══════════════════════════════════
+   UTILITAIRES
+══════════════════════════════════ */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function padZ(n){ return String(n).padStart(2,'0'); }
+
+function formatTime(s){
+  return padZ(Math.floor(s/60))+':'+padZ(s%60);
+}
+
+function themeClass(t){
+  const m={usa:'theme-usa',chine:'theme-chine',nigeria:'theme-nigeria',burkina:'theme-burkina',ter:'theme-ter',sec:'theme-sec'};
+  return m[t]||'';
+}
+
+/* ══════════════════════════════════
+   CHRONO
+══════════════════════════════════ */
+function startTimer(){
+  clearInterval(timerInterval);
+  secondsElapsed=0;
+  timerInterval=setInterval(()=>{
+    secondsElapsed++;
+    document.getElementById('chrono').textContent=formatTime(secondsElapsed);
+  },1000);
+}
+function stopTimer(){ clearInterval(timerInterval); }
+
+/* ══════════════════════════════════
+   BARRE DE PROGRESSION
+══════════════════════════════════ */
+function updateProgress(){
+  const total=questions.length;
+  const pct=total?Math.round(answered/total*100):0;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=answered+' / '+total+' répondues';
+  document.getElementById('answered-count').textContent=answered;
+  document.getElementById('score-live').textContent=correct;
+  if(answered===total && total>0) showResult();
+}
+
+/* ══════════════════════════════════
+   MÉLANGE ET RENDU
+══════════════════════════════════ */
+function shuffleAndStart(){
+  questions = shuffle([...QCM, ...VF]);
+  scores={};
+  answered=0;
+  correct=0;
+  document.getElementById('result-panel').style.display='none';
+  startTimer();
+  renderQuiz();
+  updateProgress();
+}
+
+function renderQuiz(){
+  const main=document.getElementById('quiz-main');
+  main.innerHTML='';
+
+  // Sections par type
+  const qcmList=questions.filter(q=>q.type==='qcm');
+  const vfList =questions.filter(q=>q.type==='vf');
+
+  if(qcmList.length){
+    const h=document.createElement('div');
+    h.className='section-title';
+    h.innerHTML=`📝 Questions à Choix Multiple <span class="section-badge">QCM — ${qcmList.length} questions</span>`;
+    main.appendChild(h);
+    qcmList.forEach((q,i)=>main.appendChild(buildQCM(q, questions.indexOf(q), i+1)));
+  }
+
+  if(vfList.length){
+    const h=document.createElement('div');
+    h.className='section-title';
+    h.innerHTML=`✅ Vrai ou Faux <span class="section-badge">VF — ${vfList.length} questions</span>`;
+    main.appendChild(h);
+    vfList.forEach((q,i)=>main.appendChild(buildVF(q, questions.indexOf(q), i+1)));
+  }
+}
+
+function buildQCM(q, globalIdx, localNum){
+  const card=document.createElement('div');
+  card.className='q-card';
+  card.id='card-'+globalIdx;
+
+  const opts=shuffle(q.opts.map((o,i)=>({text:o, isCorrect:i===q.rep})));
+
+  card.innerHTML=`
+    <div class="q-num">QCM N° ${localNum}</div>
+    <span class="q-theme ${themeClass(q.theme)}">${q.themeLabel}</span>
+    <div class="q-text">${q.q}</div>
+    <div class="options" id="opts-${globalIdx}">
+      ${opts.map((o,i)=>`
+        <div class="opt" id="opt-${globalIdx}-${i}" onclick="answerQCM(${globalIdx},${i},${o.isCorrect})">
+          <div class="opt-letter">${'ABCD'[i]}</div>
+          <span>${o.text}</span>
+        </div>`).join('')}
+    </div>
+    <div class="feedback" id="fb-${globalIdx}"></div>
+  `;
+  return card;
+}
+
+function buildVF(q, globalIdx, localNum){
+  const card=document.createElement('div');
+  card.className='q-card';
+  card.id='card-'+globalIdx;
+
+  card.innerHTML=`
+    <div class="q-num">V/F N° ${localNum}</div>
+    <span class="q-theme ${themeClass(q.theme)}">${q.themeLabel}</span>
+    <div class="q-text">${q.q}</div>
+    <div class="vf-wrap">
+      <div class="vf-btn" id="vf-${globalIdx}-true"  onclick="answerVF(${globalIdx},true,${q.rep})">✔ VRAI</div>
+      <div class="vf-btn" id="vf-${globalIdx}-false" onclick="answerVF(${globalIdx},false,${q.rep})">✘ FAUX</div>
+    </div>
+    <div class="feedback" id="fb-${globalIdx}"></div>
+  `;
+  return card;
+}
+
+/* ══════════════════════════════════
+   RÉPONSES
+══════════════════════════════════ */
+function answerQCM(gIdx, optIdx, isCorrect){
+  if(scores[gIdx]!==undefined) return;
+  scores[gIdx]=isCorrect;
+  answered++;
+  if(isCorrect) correct++;
+
+  const optsEl=document.getElementById('opts-'+gIdx);
+  const allOpts=optsEl.querySelectorAll('.opt');
+  allOpts.forEach((el,i)=>{
+    el.classList.add('locked');
+    if(i===optIdx) el.classList.add(isCorrect?'correct':'wrong');
+  });
+  // Trouver et marquer la bonne réponse si mauvaise sélection
+  if(!isCorrect){
+    allOpts.forEach(el=>{
+      const txt=el.querySelector('span').textContent;
+      const q=questions[gIdx];
+      if(txt===q.opts[q.rep]) el.classList.add('correct');
+    });
+  }
+
+  const card=document.getElementById('card-'+gIdx);
+  card.classList.add(isCorrect?'answered-correct':'answered-wrong');
+
+  const fb=document.getElementById('fb-'+gIdx);
+  fb.className='feedback show '+(isCorrect?'ok':'ko');
+  fb.innerHTML=(isCorrect?'✓ Bonne réponse ! ':'✗ Mauvaise réponse. ')+questions[gIdx].expl;
+
+  updateProgress();
+}
+
+function answerVF(gIdx, chosen, correct_rep){
+  if(scores[gIdx]!==undefined) return;
+  const isCorrect=(chosen===correct_rep);
+  scores[gIdx]=isCorrect;
+  answered++;
+  if(isCorrect) correct++;
+
+  const trueBtn =document.getElementById('vf-'+gIdx+'-true');
+  const falseBtn=document.getElementById('vf-'+gIdx+'-false');
+  trueBtn.classList.add('locked');
+  falseBtn.classList.add('locked');
+
+  const chosenBtn=chosen?trueBtn:falseBtn;
+  chosenBtn.classList.add(isCorrect?'correct':'wrong');
+  if(!isCorrect){
+    (correct_rep?trueBtn:falseBtn).classList.add('correct');
+  }
+
+  const card=document.getElementById('card-'+gIdx);
+  card.classList.add(isCorrect?'answered-correct':'answered-wrong');
+
+  const fb=document.getElementById('fb-'+gIdx);
+  fb.className='feedback show '+(isCorrect?'ok':'ko');
+  fb.innerHTML=(isCorrect?'✓ Bonne réponse ! ':'✗ Mauvaise réponse. ')+questions[gIdx].expl;
+
+  updateProgress();
+}
+
+/* ══════════════════════════════════
+   RÉSULTAT FINAL
+══════════════════════════════════ */
+function showResult(){
+  stopTimer();
+  const total=questions.length;
+  const pct=Math.round(correct/total*100);
+  let mention='';
+  if(pct>=90) mention='🏆 Excellent — Félicitations !';
+  else if(pct>=75) mention='👏 Très Bien — Bravo !';
+  else if(pct>=60) mention='👍 Bien — Continue !';
+  else if(pct>=50) mention='📘 Passable — Des efforts à fournir.';
+  else mention='⚠️ Insuffisant — Révise les leçons.';
+
+  document.getElementById('res-score').textContent=correct+'/'+total;
+  document.getElementById('res-correct').textContent=correct;
+  document.getElementById('res-wrong').textContent=total-correct;
+  document.getElementById('res-time').textContent=formatTime(secondsElapsed);
+  document.getElementById('res-mention').textContent=mention+' ('+pct+' %)';
+  document.getElementById('result-panel').style.display='block';
+  document.getElementById('result-panel').scrollIntoView({behavior:'smooth'});
+}
+
+/* ══════════════════════════════════
+   RESET
+══════════════════════════════════ */
+function resetQuiz(){
+  stopTimer();
+  secondsElapsed=0;
+  answered=0;
+  correct=0;
+  scores={};
+  document.getElementById('chrono').textContent='00:00';
+  document.getElementById('prog-fill').style.width='0%';
+  document.getElementById('prog-label').textContent='0 / 126 répondues';
+  document.getElementById('answered-count').textContent='0';
+  document.getElementById('score-live').textContent='0';
+  document.getElementById('result-panel').style.display='none';
+  document.getElementById('quiz-main').innerHTML=
+    '<p style="text-align:center;color:#999;padding:3rem;font-size:.9rem;">Cliquez sur <strong>🔀 Mélanger & Commencer</strong> pour lancer le questionnaire.</p>';
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+resetQuiz();
+</script>
+</body>
+</html>
