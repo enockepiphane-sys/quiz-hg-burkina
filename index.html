@@ -1175,6 +1175,40 @@ function shuffle(arr) {
 
 init();
 </script>
-</body>
+<script>
+(function() {
+  let audioCtx;
+  function tone(freq, duration, type) {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + duration);
+  }
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.option-item, .vf-btn, .mode-btn, .btn-start, .btn-valider, .btn-suivant, .btn-passer, .btn-rejouer, .btn-restart')) {
+      tone(700, 0.06, 'square');
+    }
+  }, true);
+  new MutationObserver(() => {
+    document.querySelectorAll('.option-item:not([data-w]), .vf-btn:not([data-w])').forEach(el => {
+      el.dataset.w = '1';
+      new MutationObserver(() => {
+        if (el.classList.contains('correct') || el.classList.contains('correct-vrai') || el.classList.contains('correct-faux')) {
+          if (!el.dataset.s1) { tone(523,0.12); setTimeout(()=>tone(784,0.18),100); el.dataset.s1='1'; }
+        }
+        if (el.classList.contains('wrong') || el.classList.contains('wrong-btn')) {
+          if (!el.dataset.s2) { tone(200,0.25,'sawtooth'); el.dataset.s2='1'; }
+        }
+      }).observe(el, { attributes: true });
+    });
+  }).observe(document.body, { childList: true, subtree: true });
+})();
+</script></body>
 </html>
 </html>
