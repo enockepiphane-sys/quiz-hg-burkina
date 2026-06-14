@@ -6,8 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"/>
 <title>Questionnaire Histoire-Géographie – Terminale A</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
-
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap')
   :root {
     --rouge: #EF2B2D;
     --vert: #009A44;
@@ -20,15 +19,14 @@
     --ombre: 0 4px 24px rgba(0,0,0,0.10);
   }html, body { background: var(--vert); }
 .header-top-bands { padding-top: env(safe-area-inset-top, 0px); }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'Inter', sans-serif;
     background: var(--gris-clair);
     color: var(--noir);
     min-height: 100vh;
-  }<script>
+  } 
+ <script>
 (function() {
   let audioCtx;
   function getCtx() {
@@ -36,9 +34,9 @@
     return audioCtx;
   }
   function tone(freq, duration, type, vol) {
-  const ctx = getCtx();
-  if (ctx.state === 'suspended') ctx.resume();
-  const osc = ctx.createOscillator();  
+    const ctx = getCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = type || 'sine';
     osc.frequency.value = freq;
@@ -47,9 +45,10 @@
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(); osc.stop(ctx.currentTime + duration);
   }
-  function playClick() { tone(700, 0.06, 'square', 0.08); }
-  function playCorrect() { tone(523, 0.12); setTimeout(()=>tone(784, 0.18), 100); }
-  function playWrong() { tone(200, 0.25, 'sawtooth', 0.12); }
+  function isSoundOn() { return localStorage.getItem('soundOn') !== 'false'; }
+  function playClick() { if (!isSoundOn()) return; tone(700, 0.06, 'square', 0.08); }
+  function playCorrect() { if (!isSoundOn()) return; tone(523, 0.12); setTimeout(()=>tone(784, 0.18), 100); }
+  function playWrong() { if (!isSoundOn()) return; tone(200, 0.25, 'sawtooth', 0.12); }
 
   document.addEventListener('click', function(e) {
     if (e.target.closest('.option-item, .vf-btn, .mode-btn, .btn-start, .btn-valider, .btn-suivant, .btn-passer, .btn-home-quiz, .btn-rejouer, .btn-restart, .lecon-check')) {
@@ -74,9 +73,25 @@
       watchEl(el);
     });
   }).observe(document.body, { childList: true, subtree: true });
+
+  window.toggleSound = function() {
+    const cb = document.getElementById('sound-toggle');
+    localStorage.setItem('soundOn', cb.checked);
+    if (cb.checked) playClick();
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+    const cb = document.getElementById('sound-toggle');
+    if (cb) cb.checked = isSoundOn();
+  });
+
+  window.quitterApp = function() {
+    if (!confirm("Voulez-vous quitter l'application ?")) return;
+    try { if (window.median && median.app && median.app.exit) { median.app.exit(); return; } } catch(e) {}
+    try { if (window.gonative && gonative.app && gonative.app.exit) { gonative.app.exit(); return; } } catch(e) {}
+    window.close();
+  };
 })();
 </script>
-
   /* ======== HEADER ======== */
   .header { background: var(--vert); color: var(--blanc); padding: 0; }
   .header-top-bands { display: flex; height: 8px; }
@@ -568,6 +583,19 @@
     <button class="btn-start" onclick="startQuiz()">✖ Mélanger &amp; Commencer</button>
   </div>
 
+ <div class="card">
+    <h2>Paramètres</h2>
+    <div class="lecon-check" onclick="toggleSound()">
+      <input type="checkbox" id="sound-toggle" checked onclick="event.stopPropagation(); toggleSound()"/>
+      <span>🔊 Activer les sons</span>
+    </div>
+    <a href="mailto:TON-EMAIL@gmail.com?subject=Support Quiz HG Burkina" class="lecon-check" style="margin-top:10px; text-decoration:none; color:inherit; display:flex;">
+      <span>✉️ Contacter le service client</span>
+    </a>
+    <div class="lecon-check" style="margin-top:10px;" onclick="quitterApp()">
+      <span>🚪 Quitter l'application</span>
+    </div>
+  </div>
   <div class="signature">Questionnaire conçu et produit — <strong>PAR SAOUADOGO W E EPIPHANE</strong></div>
   <div class="app-date">Application créée en 06/2026</div>
 </div>
