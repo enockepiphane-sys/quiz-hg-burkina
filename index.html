@@ -557,7 +557,15 @@ document.addEventListener("DOMContentLoaded", function() {
   .btn-suivant:hover { background: #333; }
   .btn-passer  { background: var(--gris-moyen); color: var(--gris-texte); }
   .btn-passer:hover { background: #d0d3db; }
-
+<div id="screen-duel-attente" style="display:none; max-width:680px; margin:32px auto; padding:0 16px;">
+  <div class="card" style="text-align:center;">
+    <h2>⚔️ Duel en attente</h2>
+    <p>Partage ce lien avec ton adversaire :</p>
+    <input id="duel-lien" type="text" readonly style="width:100%;padding:12px;margin:12px 0;border-radius:8px;border:1.5px solid var(--gris-moyen);text-align:center;font-size:0.85rem;">
+    <button class="btn-start" id="btn-copier-lien">📋 Copier le lien</button>
+    <p style="margin-top:16px;color:var(--gris-texte);font-size:0.85rem;">⏳ En attente que ton adversaire rejoigne...</p>
+  </div>
+</div>
   /* ======== RESULTATS ======== */
   #screen-result { display: none; max-width: 680px; margin: 32px auto; padding: 0 16px; }
   .result-hero {
@@ -762,7 +770,11 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
     <button class="btn-start" onclick="startQuiz()">✖ Mélanger &amp; Commencer</button>
   </div>
-
+<div class="card">
+  <h2>Mode Duel</h2>
+  <p>Affronte un adversaire en temps réel sur les mêmes questions !</p>
+  <button class="btn-start" id="btn-duel" style="background:linear-gradient(135deg,#b36200,#f97316);">⚔️ Lancer un duel</button>
+</div>
   <div class="signature">Questionnaire conçu et produit — <strong>PAR SAOUADOGO W E EPIPHANE</strong></div>
   <div class="app-date">Application créée en 06/2026</div>
 </div>
@@ -1424,6 +1436,49 @@ init();
   const analytics = getAnalytics(app);
   const auth = getAuth(app);
 const db = getFirestore(app);
+  function genererToutesQuestions() {
+  const qcm = QUESTIONS_QCM.map(x => ({...x, type:"qcm"}));
+  const vf = QUESTIONS_VF.map(x => ({...x, type:"vf"}));
+  return [...qcm, ...vf];
+}
+
+async function creerDuel() {
+  if (!auth.currentUser) {
+    alert("Tu dois être connecté pour lancer un duel.");
+    return;
+  }
+  const melangees = genererToutesQuestions().sort(() => Math.random() - 0.5);
+  const questionsDuel = melangees.slice(0, 10);
+  const duelId = Math.random().toString(36).substring(2, 8);
+  const pseudo = auth.currentUser.email.split('@')[0];
+
+  await setDoc(doc(db, "duels", duelId), {
+    questions: questionsDuel,
+    createur: { uid: auth.currentUser.uid, pseudo: pseudo },
+    adversaire: null,
+    scores: { [auth.currentUser.uid]: 0 },
+    reponses: { [auth.currentUser.uid]: 0 },
+    statut: "attente",
+    createdAt: Date.now()
+  });
+
+  const lien = window.location.origin + window.location.pathname + "?duel=" + duelId;
+  document.getElementById("screen-home").style.display = "none";
+  document.getElementById("screen-duel-attente").style.display = "block";
+  document.getElementById("duel-lien").value = lien;
+
+  onSnapshot(doc(db, "duels", duelId), (snap) => {
+    const data = snap.data();
+    if (data && data.statut === "en_cours") {
+      console.log("Le duel commence !", data);
+    }
+  });
+}
+
+function copierLienDuel() {
+  const input = document.getElementById("duel-lien");
+  navigator.clipboard.writeText(input.value).then(() => alert("Lien copié !"));
+}
   let modeAuth = "inscription";
 
   function showLogin() {
@@ -1468,6 +1523,8 @@ const db = getFirestore(app);
   document.getElementById("btn-login").addEventListener("click", showLogin);
   document.getElementById("btn-register").addEventListener("click", showRegister);
   document.getElementById("btn-submit").addEventListener("click", submitAuth);
+  document.getElementById("btn-duel").addEventListener("click", creerDuel);
+document.getElementById("btn-copier-lien").addEventListener("click", copierLienDuel);
 </script>
 </body>
 </html>
