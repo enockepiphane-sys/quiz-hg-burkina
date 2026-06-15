@@ -658,8 +658,8 @@
     <p style="color:#aaa;">Connectez-vous pour affronter un adversaire</p>
     
     <div style="display:flex;gap:10px;margin:20px 0;">
-      <button onclick="showLogin()" id="btn-login" style="flex:1;padding:10px;background:#333;color:white;border:none;border-radius:8px;cursor:pointer;">Connexion</button>
-      <button onclick="showRegister()" id="btn-register" style="flex:1;padding:10px;background:#f5a623;color:black;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">Inscription</button>
+      <button="showLogin()" id="btn-login" style="flex:1;padding:10px;background:#333;color:white;border:none;border-radius:8px;cursor:pointer;">Connexion</button>
+      <button="showRegister()" id="btn-register" style="flex:1;padding:10px;background:#f5a623;color:black;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">Inscription</button>
     </div>
 
     <div id="error-msg" style="color:red;background:#3a0000;padding:10px;border-radius:8px;display:none;margin-bottom:10px;"></div>
@@ -1468,9 +1468,9 @@ let modeAuth = "inscription";
     }
   }
 
-  window.showLogin = showLogin;
-  window.showRegister = showRegister;
-  window.submitAuth = submitAuth;</script>
+  document.getElementById("btn-login").addEventListener("click", showLogin);
+document.getElementById("btn-register").addEventListener("click", showRegister);
+document.getElementById("btn-submit").addEventListener("click", submitAuth);</script>
 </body>
 </html>
 </html>
