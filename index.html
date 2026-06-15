@@ -651,7 +651,27 @@
 #music-toggle:hover { transform: scale(1.12); }
 #music-toggle.muted { background: #888; }</style>
 </head>
-<body><button id="music-toggle" onclick="window._audio.toggleMusic()">🎵</button>
+<body><!-- ========== ECRAN CONNEXION ========== -->
+<div id="ecran-auth" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0d1b2a;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#1a2a3a;padding:30px;border-radius:15px;width:90%;max-width:400px;text-align:center;">
+    <h2 style="color:#f5a623;">🇧🇫 Quiz HG Burkina</h2>
+    <p style="color:#aaa;">Connectez-vous pour affronter un adversaire</p>
+    
+    <div style="display:flex;gap:10px;margin:20px 0;">
+      <button onclick="showLogin()" id="btn-login" style="flex:1;padding:10px;background:#333;color:white;border:none;border-radius:8px;cursor:pointer;">Connexion</button>
+      <button onclick="showRegister()" id="btn-register" style="flex:1;padding:10px;background:#f5a623;color:black;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">Inscription</button>
+    </div>
+
+    <div id="error-msg" style="color:red;background:#3a0000;padding:10px;border-radius:8px;display:none;margin-bottom:10px;"></div>
+
+    <input id="auth-email" type="email" placeholder="Adresse e-mail" style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;box-sizing:border-box;">
+    <input id="auth-pseudo" type="text" placeholder="Pseudo (affiché en duel)" style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;box-sizing:border-box;">
+    <input id="auth-password" type="password" placeholder="Mot de passe" style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;box-sizing:border-box;">
+
+    <button id="btn-submit" onclick="submitAuth()" style="width:100%;padding:15px;background:#f5a623;border:none;border-radius:10px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px;">S'inscrire</button>
+  </div>
+</div>
+  <button id="music-toggle" onclick="window._audio.toggleMusic()">🎵</button>
 
 <!-- ============================================================ HEADER -->
 <header class="header">
@@ -1386,6 +1406,8 @@ init();
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+ import { getAuth, createUserWithEmailAndPassword, 
+signInWithEmailAndPassword } from "firebase/auth";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -1404,6 +1426,7 @@ init();
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+const auth = getAuth(app);
 </script>
 </body>
 </html>
