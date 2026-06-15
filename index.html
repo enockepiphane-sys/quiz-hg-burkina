@@ -1409,7 +1409,7 @@ init();
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-
+  import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
   const firebaseConfig = {
     apiKey: "AIzaSyAFiobuwV_-4KryUQPl3BJOpnGtvCR2vu8",
     authDomain: "hg-terminale.firebaseapp.com",
@@ -1423,7 +1423,7 @@ init();
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
   const auth = getAuth(app);
-
+const db = getFirestore(app);
   let modeAuth = "inscription";
 
   function showLogin() {
