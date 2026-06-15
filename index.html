@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+c!DOCTYPE html>
 <html lang="fr">
 <head>
 <link rel="manifest" href="/quiz-hg-burkina/manifest.json">
@@ -1407,16 +1407,10 @@ init();
 })();
 </script>
 <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
- import { getAuth, createUserWithEmailAndPassword, 
-signInWithEmailAndPassword } from "firebase/auth";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
     apiKey: "AIzaSyAFiobuwV_-4KryUQPl3BJOpnGtvCR2vu8",
     authDomain: "hg-terminale.firebaseapp.com",
@@ -1427,11 +1421,11 @@ signInWithEmailAndPassword } from "firebase/auth";
     measurementId: "G-Z4KWQ83RJT"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-const auth = getAuth(app);
-let modeAuth = "inscription";
+  const auth = getAuth(app);
+
+  let modeAuth = "inscription";
 
   function showLogin() {
     modeAuth = "connexion";
@@ -1473,8 +1467,9 @@ let modeAuth = "inscription";
   }
 
   document.getElementById("btn-login").addEventListener("click", showLogin);
-document.getElementById("btn-register").addEventListener("click", showRegister);
-document.getElementById("btn-submit").addEventListener("click", submitAuth);</script>
+  document.getElementById("btn-register").addEventListener("click", showRegister);
+  document.getElementById("btn-submit").addEventListener("click", submitAuth);
+</script>
 </body>
 </html>
 </html>
