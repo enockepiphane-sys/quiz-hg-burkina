@@ -1427,7 +1427,50 @@ signInWithEmailAndPassword } from "firebase/auth";
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 const auth = getAuth(app);
-</script>
+let modeAuth = "inscription";
+
+  function showLogin() {
+    modeAuth = "connexion";
+    document.getElementById("btn-login").style.background = "#f5a623";
+    document.getElementById("btn-login").style.color = "black";
+    document.getElementById("btn-register").style.background = "#333";
+    document.getElementById("btn-register").style.color = "white";
+    document.getElementById("auth-pseudo").style.display = "none";
+    document.getElementById("btn-submit").textContent = "Se connecter";
+  }
+
+  function showRegister() {
+    modeAuth = "inscription";
+    document.getElementById("btn-register").style.background = "#f5a623";
+    document.getElementById("btn-register").style.color = "black";
+    document.getElementById("btn-login").style.background = "#333";
+    document.getElementById("btn-login").style.color = "white";
+    document.getElementById("auth-pseudo").style.display = "block";
+    document.getElementById("btn-submit").textContent = "S'inscrire";
+  }
+
+  async function submitAuth() {
+    const email = document.getElementById("auth-email").value;
+    const password = document.getElementById("auth-password").value;
+    const erreur = document.getElementById("error-msg");
+    erreur.style.display = "none";
+
+    try {
+      if (modeAuth === "inscription") {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
+      document.getElementById("ecran-auth").style.display = "none";
+    } catch (e) {
+      erreur.style.display = "block";
+      erreur.textContent = e.message;
+    }
+  }
+
+  window.showLogin = showLogin;
+  window.showRegister = showRegister;
+  window.submitAuth = submitAuth;</script>
 </body>
 </html>
 </html>
