@@ -1182,7 +1182,7 @@ shuffle(order);
 order.forEach((origIdx, i) => {
   const li = document.createElement('li');
   li.className = 'option-item';
-  li.innerHTML = <span class="opt-letter">${letters[i]}</span><span>${q.o[origIdx]}</span>;
+  li.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${q.o[origIdx]}</span>`;
   li.onclick = () => selectOption(li, origIdx);
   list.appendChild(li);
 });
