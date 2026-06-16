@@ -1177,13 +1177,15 @@ function renderOptions(q) {
   const list = document.getElementById('options-list');
   list.innerHTML = '';
   const letters = ['A','B','C','D'];
-  q.o.forEach((opt, i) => {
-    const li = document.createElement('li');
-    li.className = 'option-item';
-    li.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
-    li.onclick = () => selectOption(li, i);
-    list.appendChild(li);
-  });
+ const order = q.o.map((_, i) => i);
+shuffle(order);
+order.forEach((origIdx, i) => {
+  const li = document.createElement('li');
+  li.className = 'option-item';
+  li.innerHTML = <span class="opt-letter">${letters[i]}</span><span>${q.o[origIdx]}</span>;
+  li.onclick = () => selectOption(li, origIdx);
+  list.appendChild(li);
+});
 }
 
 function renderVF() {
