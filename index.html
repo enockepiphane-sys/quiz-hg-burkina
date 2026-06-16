@@ -1218,7 +1218,6 @@ function validateAnswer() {
     const correct = q.r;
     answered = true;
     const items = document.querySelectorAll('#options-list .option-item');
-    items[correct].classList.add('correct');
     if (idx === correct) {
       score++;
       if (resultByLecon[q.l]) resultByLecon[q.l].bon++;
