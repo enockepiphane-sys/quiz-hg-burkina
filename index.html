@@ -717,6 +717,15 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="stat-home-card">
       <div><div class="stat-val">168</div><div class="stat-lbl">Questions totales</div></div>
     </div>
+    <!-- ÉCRAN DUEL ATTENTE -->
+<div id="screen-duel-attente" style="display:none;text-align:center;padding:30px;">
+  <h2>⚔️ Duel créé !</h2>
+  <p>Partage ce lien à ton adversaire :</p>
+  <input id="duel-lien" type="text" readonly style="width:90%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;">
+  <br>
+  <button id="btn-copier-lien" style="padding:12px 20px;background:#f5a623;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">📋 Copier le lien</button>
+  <p style="color:#888;margin-top:20px;">⏳ En attente de l'adversaire...</p>
+</div>
     <div class="stat-home-card">
       <div><div class="stat-val">0</div><div class="stat-lbl">Score actuel</div></div>
     </div>
