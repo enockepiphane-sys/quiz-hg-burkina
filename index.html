@@ -782,6 +782,26 @@
     <div class="score-mention" id="res-mention"></div>
   </div>
 
+  <!-- ===== Comparaison duel (visible uniquement après un duel) ===== -->
+  <div class="card" id="duel-comparaison" style="display:none;margin-bottom:16px;">
+    <h2>⚔️ Résultat du duel</h2>
+    <div id="duel-banniere" style="text-align:center;font-size:1.15rem;font-weight:700;margin:8px 0 14px;"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:140px;background:var(--gris-clair);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:0.72rem;color:var(--gris-texte);text-transform:uppercase;letter-spacing:0.06em;">Toi</div>
+        <div id="duel-moi-pseudo" style="font-weight:700;margin:4px 0;color:var(--noir);">Toi</div>
+        <div style="font-size:1.6rem;font-weight:800;color:var(--vert);" id="duel-moi-score">--</div>
+        <div style="font-size:0.78rem;color:var(--gris-texte);" id="duel-moi-detail">-- bonnes réponses</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:var(--gris-clair);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:0.72rem;color:var(--gris-texte);text-transform:uppercase;letter-spacing:0.06em;">Adversaire</div>
+        <div id="duel-adv-pseudo" style="font-weight:700;margin:4px 0;color:var(--noir);">--</div>
+        <div style="font-size:1.6rem;font-weight:800;color:var(--rouge);" id="duel-adv-score">⏳</div>
+        <div style="font-size:0.78rem;color:var(--gris-texte);" id="duel-adv-detail">En attente du résultat...</div>
+      </div>
+    </div>
+  </div>
+
   <div class="stats-grid">
     <div class="stat-card">
       <div class="val" id="res-bonnes">0</div>
@@ -1200,6 +1220,7 @@ let score = 0;
 let passees = 0;
 let answered = false;
 let resultByLecon = {};
+let currentDuelId = null;
 
 // Timer
 let timerInterval = null;
@@ -1466,10 +1487,62 @@ function showResults() {
     const bar = `<div style="background:var(--gris-moyen);border-radius:4px;height:6px;margin-top:2px;margin-bottom:6px"><div style="width:${p}%;height:100%;background:${p>=60?'var(--vert)':'var(--rouge)'};border-radius:4px"></div></div>`;
     recap.innerHTML += `<div style="margin-bottom:8px"><span style="font-weight:600">${l}</span> — ${d.bon}/${d.total} (${p}%)${bar}</div>`;
   });
+
+  // ===== Mode duel : envoi du résultat et affichage de la comparaison =====
+  const duelCard = document.getElementById('duel-comparaison');
+  if (currentDuelId) {
+    duelCard.style.display = 'block';
+    document.getElementById('duel-moi-score').textContent = pct + '%';
+    document.getElementById('duel-moi-detail').textContent = `${score} bonne(s) réponse(s) sur ${total}`;
+    document.getElementById('duel-adv-pseudo').textContent = '--';
+    document.getElementById('duel-adv-score').textContent = '⏳';
+    document.getElementById('duel-adv-detail').textContent = 'En attente du résultat...';
+    document.getElementById('duel-banniere').textContent = '';
+    const mauvaises = total - score - passees;
+    if (window.duelEnregistrerResultat) {
+      window.duelEnregistrerResultat({ score, bonnes: score, mauvaises, passees, total, pct });
+    }
+  } else if (duelCard) {
+    duelCard.style.display = 'none';
+  }
+}
+
+/* =====================================================================
+   AFFICHAGE DE LA COMPARAISON DE DUEL
+   (appelé depuis le script Firebase via window.duelAfficherAdversaire)
+   ===================================================================== */
+function duelAfficherAdversaire(pseudoAdversaire, resultatAdversaire, monResultat) {
+  const pEl = document.getElementById('duel-adv-pseudo');
+  if (pEl) pEl.textContent = pseudoAdversaire || 'Adversaire';
+
+  if (!resultatAdversaire) {
+    document.getElementById('duel-adv-score').textContent = '⏳';
+    document.getElementById('duel-adv-detail').textContent = 'En attente du résultat...';
+    return;
+  }
+
+  document.getElementById('duel-adv-score').textContent = resultatAdversaire.pct + '%';
+  document.getElementById('duel-adv-detail').textContent =
+    `${resultatAdversaire.bonnes} bonne(s) réponse(s) sur ${resultatAdversaire.total}`;
+
+  const banniere = document.getElementById('duel-banniere');
+  if (!banniere || !monResultat) return;
+  if (monResultat.bonnes > resultatAdversaire.bonnes) {
+    banniere.textContent = '🏆 Tu as gagné ce duel !';
+    banniere.style.color = 'var(--vert)';
+  } else if (monResultat.bonnes < resultatAdversaire.bonnes) {
+    banniere.textContent = '😅 Tu as perdu ce duel.';
+    banniere.style.color = 'var(--rouge)';
+  } else {
+    banniere.textContent = '🤝 Match nul !';
+    banniere.style.color = '#f5a623';
+  }
 }
 
 function goHome() {
   stopTimer(); timerSeconds = 0;
+  if (window.duelNettoyer) window.duelNettoyer();
+  currentDuelId = null;
   document.getElementById('screen-result').style.display = 'none';
   document.getElementById('screen-home').style.display = 'block';
 }
@@ -1477,6 +1550,8 @@ function goHome() {
 function confirmGoHome() {
   if (confirm('Abandonner ce quiz et retourner à l\'accueil ?')) {
     stopTimer(); timerSeconds = 0;
+    if (window.duelNettoyer) window.duelNettoyer();
+    currentDuelId = null;
     score = 0; passees = 0; currentIndex = 0; answered = false;
     document.getElementById('screen-quiz').style.display = 'none';
     document.getElementById('screen-home').style.display = 'block';
@@ -1485,6 +1560,8 @@ function confirmGoHome() {
 
 function restartSame() {
   if (sessionQuestions.length === 0) { goHome(); return; }
+  if (window.duelNettoyer) window.duelNettoyer();
+  currentDuelId = null;
   shuffle(sessionQuestions);
   currentIndex = 0; score = 0; passees = 0; answered = false;
   Object.keys(resultByLecon).forEach(l => { resultByLecon[l] = {bon:0, total:0}; });
@@ -1620,10 +1697,11 @@ const db = getFirestore(app);
   return [...qcm, ...vf];
 }
 
-function demarrerDuel(questions) {
+function demarrerDuel(questions, duelId) {
   document.getElementById("screen-duel-attente").style.display = "none";
   document.getElementById("screen-home").style.display = "none";
   document.getElementById("screen-result").style.display = "none";
+  currentDuelId = duelId || null;
   sessionQuestions = questions;
   currentIndex = 0;
   score = 0;
@@ -1671,7 +1749,7 @@ async function creerDuel() {
     const data = snap.data();
     if (data && data.statut === "en_cours") {
       unsubCreateur();
-      demarrerDuel(data.questions);
+      demarrerDuel(data.questions, duelId);
     }
   });
 }
@@ -1718,8 +1796,58 @@ async function rejoindreDuel(duelIdInput) {
     [`reponses.${auth.currentUser.uid}`]: 0,
     statut: "en_cours"
   });
-  demarrerDuel(snap.data().questions);
+  demarrerDuel(snap.data().questions, duelId);
 }
+
+/* =====================================================================
+   COMPARAISON DES RÉSULTATS DE DUEL
+   Appelé depuis showResults() (script classique) une fois le quiz terminé.
+   ===================================================================== */
+let duelUnsubComparaison = null;
+
+window.duelEnregistrerResultat = async function(resultat) {
+  if (!currentDuelId || !auth.currentUser) return;
+  const duelId = currentDuelId;
+  const myUid = auth.currentUser.uid;
+  const pseudo = auth.currentUser.email.split('@')[0];
+  const duelRef = doc(db, "duels", duelId);
+
+  try {
+    await updateDoc(duelRef, {
+      [`resultats.${myUid}`]: {
+        pseudo,
+        bonnes: resultat.bonnes,
+        mauvaises: resultat.mauvaises,
+        passees: resultat.passees,
+        total: resultat.total,
+        pct: resultat.pct
+      }
+    });
+  } catch (err) {
+    console.error("Erreur enregistrement résultat duel :", err);
+    return;
+  }
+
+  if (duelUnsubComparaison) { duelUnsubComparaison(); duelUnsubComparaison = null; }
+
+  duelUnsubComparaison = onSnapshot(duelRef, (snap) => {
+    const data = snap.data();
+    if (!data) return;
+    const jeSuisCreateur = data.createur && data.createur.uid === myUid;
+    const advInfo = jeSuisCreateur ? data.adversaire : data.createur;
+    const advUid = advInfo ? advInfo.uid : null;
+    const advPseudo = advInfo ? advInfo.pseudo : null;
+    const resultatAdversaire = (advUid && data.resultats) ? data.resultats[advUid] : null;
+
+    if (window.duelAfficherAdversaire) {
+      window.duelAfficherAdversaire(advPseudo, resultatAdversaire, resultat);
+    }
+  });
+};
+
+window.duelNettoyer = function() {
+  if (duelUnsubComparaison) { duelUnsubComparaison(); duelUnsubComparaison = null; }
+};
 
   let modeAuth = "inscription";
 
