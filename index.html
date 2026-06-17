@@ -193,11 +193,7 @@
   // Démarrer musique au premier clic
   document.addEventListener('click', () => { if (musicOn) startMusic(); }, { once: true });
 })();
-document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("btn-login").addEventListener("click", showLogin);
-  document.getElementById("btn-register").addEventListener("click", showRegister);
-  document.getElementById("btn-submit").addEventListener("click", submitAuth);
-});</script>
+</script>
   }
   function tone(freq, duration, type, vol) {
   const ctx = getCtx();
@@ -659,12 +655,16 @@ document.addEventListener("DOMContentLoaded", function() {
     </style>
 </head>
 <body>
-  <!-- ========== ECRAN CONNEXION ========== -->
-<div id="ecran-auth" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0d1b2a;z-index:9999;display:flex;align-items:center;justify-content:center;">
-  <div style="background:#1a2a3a;padding:30px;border-radius:15px;width:90%;max-width:400px;text-align:center;">
-    <h2 style="color:#f5a623;">🇧🇫 Quiz HG Burkina</h2>
-    <p style="color:#aaa;">Connectez-vous pour affronter un adversaire</p>
-    
+  <!-- Bouton musique flottant -->
+  <button id="music-toggle" title="Activer/couper la musique">🎵</button>
+
+  <!-- ========== ECRAN CONNEXION (affiché uniquement pour un duel) ========== -->
+<div id="ecran-auth" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0d1b2a;z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#1a2a3a;padding:30px;border-radius:15px;width:90%;max-width:400px;text-align:center;position:relative;">
+    <button id="btn-close-auth" title="Fermer" style="position:absolute;top:8px;right:12px;background:transparent;border:none;color:#aaa;font-size:22px;cursor:pointer;">✕</button>
+    <h2 style="color:#f5a623;">⚔️ Duel — Connexion requise</h2>
+    <p style="color:#aaa;">Connecte-toi pour lancer ou rejoindre un duel</p>
+
     <div style="display:flex;background:#222;border-radius:8px;overflow:hidden;margin:20px 0;">
   <button id="btn-login" style="flex:1;padding:10px;background:#333;color:white;border:none;cursor:pointer;">Connexion</button>
   <button id="btn-register" style="flex:1;padding:10px;background:#f5a623;color:black;border:none;cursor:pointer;">Inscription</button>
@@ -714,15 +714,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="stat-home-card">
       <div><div class="stat-val">168</div><div class="stat-lbl">Questions totales</div></div>
     </div>
-    <!-- ÉCRAN DUEL ATTENTE -->
-<div id="screen-duel-attente" style="display:none;text-align:center;padding:30px;">
-  <h2>⚔️ Duel créé !</h2>
-  <p>Partage ce lien à ton adversaire :</p>
-  <input id="duel-lien" type="text" readonly style="width:90%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;">
-  <br>
-  <button id="btn-copier-lien" style="padding:12px 20px;background:#f5a623;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">📋 Copier le lien</button>
-  <p style="color:#888;margin-top:20px;">⏳ En attente de l'adversaire...</p>
-</div>
+    
     <div class="stat-home-card">
       <div><div class="stat-val">0</div><div class="stat-lbl">Score actuel</div></div>
     </div>
@@ -783,6 +775,18 @@ document.addEventListener("DOMContentLoaded", function() {
  <div class="signature">Questionnaire conçu et produit — <strong>PAR SAOUADOGO W E EPIPHANE</strong></div>
   <div class="app-date">Application créée en 06/2026</div>
 </div>
+
+<!-- ============================================================ ÉCRAN DUEL ATTENTE -->
+<div id="screen-duel-attente" style="display:none;text-align:center;padding:30px;max-width:600px;margin:0 auto;">
+  <h2>⚔️ Duel créé !</h2>
+  <p>Partage ce lien à ton adversaire :</p>
+  <input id="duel-lien" type="text" readonly style="width:90%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;">
+  <br>
+  <button id="btn-copier-lien" style="padding:12px 20px;background:#f5a623;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">📋 Copier le lien</button>
+  <p style="color:#888;margin-top:20px;">⏳ En attente de l'adversaire...</p>
+  <button id="btn-annuler-duel" style="margin-top:10px;padding:10px 18px;background:#444;color:#fff;border:none;border-radius:8px;cursor:pointer;">← Retour à l'accueil</button>
+</div>
+
 
 <!-- ============================================================ ÉCRAN QUIZ -->
 <div id="screen-quiz">
@@ -861,7 +865,7 @@ document.addEventListener("DOMContentLoaded", function() {
    126 QCM + 42 Vrai/Faux  — mélange aléatoire à l'exécution
    ===================================================================== */
 
-const LECONS = ["États-Unis","Secteur tertiaire","Secteur secondaire","Secteur primaire","Chine","Nigeria","Burkina Faso","L'Europe"];
+const LECONS = ["États-Unis","Secteur tertiaire","Secteur secondaire","Secteur primaire","Chine","Nigeria","Burkina Faso","L'Europe","Seconde Guerre mondiale","ONU","Tensions idéologiques et conflits","Fin de la bipolarisation","Causes de la décolonisation","Décolonisation du Burkina Faso","Burkina Faso 1960 à nos jours","Problèmes de l'Afrique indépendante","La civilisation","Civilisations négro-africaines"];
 
 const QUESTIONS_QCM = [
 /* =================== ÉTATS-UNIS =================== */
@@ -992,6 +996,142 @@ const QUESTIONS_QCM = [
 {l:"L'Europe",q:"Quelle ville est le siège des institutions principales de l'Union européenne ?",o:["Bruxelles","Paris","Berlin","Strasbourg"],r:0},
 {l:"L'Europe",q:"La politique de cohésion de l'UE vise à :",o:["Réduire les inégalités entre régions riches et pauvres","Uniformiser la langue en Europe","Créer une armée commune","Supprimer les frontières douanières"],r:0},
 {l:"L'Europe",q:"Quel événement majeur a marqué la réunification de l'Europe de l'Est à l'Ouest ?",o:["La chute du mur de Berlin en 1989","La création de l'euro en 1999","La signature du traité de Maastricht","L'élargissement de l'OTAN"],r:0},
+/* =================== SECONDE GUERRE MONDIALE =================== */
+{l:"Seconde Guerre mondiale",q:"Quel événement marque le début officiel de la Seconde Guerre mondiale en Europe ?",o:["L'invasion de la Pologne par l'Allemagne (1er septembre 1939)","L'attaque de Pearl Harbor","L'invasion de la France","L'Anschluss de l'Autriche"],r:0},
+{l:"Seconde Guerre mondiale",q:"Qui dirigeait l'Allemagne nazie pendant la Seconde Guerre mondiale ?",o:["Adolf Hitler","Heinrich Himmler","Hermann Göring","Joseph Goebbels"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quels pays formaient l'Axe ?",o:["Allemagne, Italie, Japon","Allemagne, URSS, Japon","France, Royaume-Uni, USA","Italie, Espagne, Portugal"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quel pacte germano-soviétique a été signé le 23 août 1939 ?",o:["Le pacte Molotov-Ribbentrop","Le pacte de Munich","Le pacte tripartite","Le pacte anti-Komintern"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quel événement provoque l'entrée en guerre des États-Unis en décembre 1941 ?",o:["L'attaque japonaise de Pearl Harbor","La bataille d'Angleterre","La chute de la France","L'invasion de l'URSS"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quelle date correspond au débarquement allié en Normandie ?",o:["6 juin 1944","8 mai 1945","11 novembre 1944","1er septembre 1944"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quelle bataille marque un tournant de la guerre sur le front de l'Est en 1942-1943 ?",o:["La bataille de Stalingrad","La bataille de Koursk","La bataille de Moscou","La bataille de Berlin"],r:0},
+{l:"Seconde Guerre mondiale",q:"Sur quelles villes japonaises ont été larguées les bombes atomiques en août 1945 ?",o:["Hiroshima et Nagasaki","Tokyo et Osaka","Kyoto et Kobe","Nagoya et Sapporo"],r:0},
+{l:"Seconde Guerre mondiale",q:"Comment appelle-t-on l'extermination systématique des Juifs par les nazis ?",o:["La Shoah (Holocauste)","La Nuit de Cristal","Le génocide arménien","La Grande Purge"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quel général français a lancé l'appel du 18 juin 1940 depuis Londres ?",o:["Charles de Gaulle","Philippe Pétain","Maxime Weygand","Leclerc"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quel régime collaborationniste s'installe en France après juin 1940 ?",o:["Le régime de Vichy","La IIIe République","La IVe République","Le Front populaire"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quelle conférence en février 1945 a partagé l'Europe d'après-guerre entre les Alliés ?",o:["La conférence de Yalta","La conférence de Téhéran","La conférence de Potsdam","La conférence de San Francisco"],r:0},
+{l:"Seconde Guerre mondiale",q:"Quel bilan humain approximatif est attribué à la Seconde Guerre mondiale ?",o:["Environ 50 à 60 millions de morts","Environ 10 millions","Environ 100 millions","Environ 200 millions"],r:0},
+/* =================== ONU =================== */
+{l:"ONU",q:"En quelle année l'ONU a-t-elle été créée ?",o:["1945","1919","1939","1955"],r:0},
+{l:"ONU",q:"Dans quelle ville la Charte des Nations Unies a-t-elle été signée ?",o:["San Francisco","New York","Genève","Paris"],r:0},
+{l:"ONU",q:"Combien d'États membres compte l'ONU aujourd'hui ?",o:["193","150","200","165"],r:0},
+{l:"ONU",q:"Où se trouve le siège principal de l'ONU ?",o:["New York","Genève","Vienne","Nairobi"],r:0},
+{l:"ONU",q:"Quel organe principal de l'ONU est chargé du maintien de la paix ?",o:["Le Conseil de sécurité","L'Assemblée générale","La Cour internationale de Justice","Le Secrétariat"],r:0},
+{l:"ONU",q:"Combien de membres permanents siègent au Conseil de sécurité ?",o:["5","10","15","7"],r:0},
+{l:"ONU",q:"Quels sont les 5 membres permanents du Conseil de sécurité ?",o:["USA, Russie, Chine, Royaume-Uni, France","USA, Allemagne, Japon, France, RU","USA, Russie, Inde, Chine, France","USA, Chine, Brésil, Inde, France"],r:0},
+{l:"ONU",q:"Qui est à la tête du Secrétariat de l'ONU ?",o:["Le Secrétaire général","Le Président","Le Haut-Commissaire","Le Directeur général"],r:0},
+{l:"ONU",q:"Quelle organisation a précédé l'ONU entre les deux guerres mondiales ?",o:["La Société des Nations (SDN)","L'OTAN","L'OMC","L'UNESCO"],r:0},
+{l:"ONU",q:"Quelle déclaration importante a été adoptée par l'ONU le 10 décembre 1948 ?",o:["La Déclaration universelle des droits de l'Homme","La Charte de l'Atlantique","La Convention de Genève","La Déclaration du Millénaire"],r:0},
+{l:"ONU",q:"Quelle agence de l'ONU s'occupe de la santé mondiale ?",o:["L'OMS","L'UNICEF","Le PNUD","L'UNESCO"],r:0},
+{l:"ONU",q:"Quelle agence de l'ONU est dédiée à l'enfance ?",o:["L'UNICEF","L'OMS","Le HCR","La FAO"],r:0},
+/* =================== TENSIONS IDÉOLOGIQUES ET CONFLITS =================== */
+{l:"Tensions idéologiques et conflits",q:"Comment appelle-t-on la période d'opposition entre USA et URSS de 1947 à 1991 ?",o:["La Guerre froide","La Détente","La Coexistence pacifique","La Belle Époque"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle doctrine américaine de 1947 visait à contenir le communisme ?",o:["La doctrine Truman","La doctrine Monroe","La doctrine Eisenhower","La doctrine Reagan"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle doctrine soviétique répondait à la doctrine Truman ?",o:["La doctrine Jdanov","La doctrine Brejnev","La doctrine Khrouchtchev","La doctrine Staline"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quel plan américain a aidé à la reconstruction de l'Europe après 1947 ?",o:["Le plan Marshall","Le plan Schuman","Le plan Dawes","Le plan Young"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle alliance militaire occidentale est créée en 1949 ?",o:["L'OTAN","Le pacte de Varsovie","La CEE","Le CAEM"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle alliance militaire des pays de l'Est est créée en 1955 ?",o:["Le pacte de Varsovie","L'OTAN","Le CAEM","La SEATO"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quel mur, symbole de la division de l'Europe, est érigé en 1961 ?",o:["Le mur de Berlin","Le mur de l'Atlantique","Le mur d'Hadrien","Le rideau de fer"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle crise en 1962 a failli déclencher une guerre nucléaire ?",o:["La crise des missiles de Cuba","La crise de Suez","La crise de Berlin","La crise du Golfe"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle guerre asiatique (1950-1953) opposa les deux blocs ?",o:["La guerre de Corée","La guerre du Vietnam","La guerre civile chinoise","La guerre d'Indochine"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle guerre américaine en Asie (1955-1975) symbolise l'échec US contre le communisme ?",o:["La guerre du Vietnam","La guerre de Corée","La guerre d'Afghanistan","La guerre du Cambodge"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Comment appelle-t-on la métaphore décrivant la séparation de l'Europe ?",o:["Le rideau de fer","Le mur de la honte","Le grand fossé","La ligne rouge"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quel discours de Churchill en 1946 popularise l'expression « rideau de fer » ?",o:["Le discours de Fulton","Le discours de Zurich","Le discours de Yalta","Le discours de Westminster"],r:0},
+{l:"Tensions idéologiques et conflits",q:"Quelle période des années 1960-1970 marque un relatif apaisement entre les deux blocs ?",o:["La Détente","La Perestroïka","La Glasnost","La Coexistence active"],r:0},
+/* =================== FIN DE LA BIPOLARISATION =================== */
+{l:"Fin de la bipolarisation",q:"Quel dirigeant soviétique lance la Perestroïka et la Glasnost en 1985 ?",o:["Mikhaïl Gorbatchev","Léonid Brejnev","Boris Eltsine","Vladimir Poutine"],r:0},
+{l:"Fin de la bipolarisation",q:"Que signifie « Perestroïka » ?",o:["Restructuration économique","Transparence","Démocratisation","Libération"],r:0},
+{l:"Fin de la bipolarisation",q:"Que signifie « Glasnost » ?",o:["Transparence","Restructuration","Liberté","Ouverture économique"],r:0},
+{l:"Fin de la bipolarisation",q:"En quelle année le mur de Berlin est-il tombé ?",o:["1989","1985","1991","1990"],r:0},
+{l:"Fin de la bipolarisation",q:"En quelle année l'URSS a-t-elle été officiellement dissoute ?",o:["1991","1989","1993","1990"],r:0},
+{l:"Fin de la bipolarisation",q:"Quel pacte militaire de l'Est est dissous en 1991 ?",o:["Le pacte de Varsovie","L'OTAN","Le CAEM","La SEATO"],r:0},
+{l:"Fin de la bipolarisation",q:"Combien d'États indépendants ont émergé après l'éclatement de l'URSS ?",o:["15","10","20","12"],r:0},
+{l:"Fin de la bipolarisation",q:"Quel président américain a déclaré la « fin de la Guerre froide » en 1989 avec Gorbatchev ?",o:["George H. W. Bush","Ronald Reagan","Bill Clinton","Jimmy Carter"],r:0},
+{l:"Fin de la bipolarisation",q:"Quel concept Francis Fukuyama a-t-il avancé après 1989 ?",o:["La fin de l'Histoire","Le choc des civilisations","La fin du capitalisme","Le nouvel ordre mondial"],r:0},
+{l:"Fin de la bipolarisation",q:"Quelle organisation regroupe certaines ex-républiques soviétiques après 1991 ?",o:["La CEI (Communauté des États indépendants)","L'OTAN","L'Union européenne","L'OCS"],r:0},
+{l:"Fin de la bipolarisation",q:"Quelle guerre en ex-Yougoslavie illustre les conflits post-Guerre froide ?",o:["La guerre de Bosnie","La guerre des Malouines","La guerre du Golfe","La guerre du Liban"],r:0},
+{l:"Fin de la bipolarisation",q:"Quelle est la conséquence majeure de la fin de la bipolarisation pour les USA ?",o:["Ils deviennent l'unique superpuissance (hyperpuissance)","Ils perdent leur influence","Ils s'isolent","Ils rejoignent l'UE"],r:0},
+/* =================== CAUSES DE LA DÉCOLONISATION =================== */
+{l:"Causes de la décolonisation",q:"Quelle guerre a affaibli les puissances coloniales européennes et accéléré la décolonisation ?",o:["La Seconde Guerre mondiale","La Première Guerre mondiale","La guerre de Crimée","La guerre franco-prussienne"],r:0},
+{l:"Causes de la décolonisation",q:"Quelle conférence afro-asiatique de 1955 marque l'éveil des peuples colonisés ?",o:["La conférence de Bandung","La conférence de Yalta","La conférence de Berlin","La conférence de San Francisco"],r:0},
+{l:"Causes de la décolonisation",q:"Quel principe de l'ONU encourage la décolonisation ?",o:["Le droit des peuples à disposer d'eux-mêmes","La non-intervention","Le libre-échange","La sécurité collective"],r:0},
+{l:"Causes de la décolonisation",q:"Quelle superpuissance, par anticolonialisme idéologique, soutenait les mouvements de libération ?",o:["L'URSS","Le Royaume-Uni","La France","Le Portugal"],r:0},
+{l:"Causes de la décolonisation",q:"Quelle puissance américaine était traditionnellement hostile au colonialisme européen ?",o:["Les États-Unis","Le Canada","Le Mexique","Le Brésil"],r:0},
+{l:"Causes de la décolonisation",q:"Comment appelle-t-on les revendications culturelles et politiques des élites africaines avant l'indépendance ?",o:["Le nationalisme africain","Le panafricanisme commercial","Le tribalisme","L'assimilation"],r:0},
+{l:"Causes de la décolonisation",q:"Quel mouvement intellectuel revendique la dignité de l'homme noir dès les années 1930 ?",o:["La Négritude","La Renaissance","Les Lumières","Le Romantisme"],r:0},
+{l:"Causes de la décolonisation",q:"Quels poètes ont fondé la Négritude ?",o:["Senghor, Césaire, Damas","Hugo, Baudelaire, Verlaine","Sartre, Camus, Beauvoir","Soyinka, Achebe, Diop"],r:0},
+{l:"Causes de la décolonisation",q:"Comment la SDN puis l'ONU ont-elles agi sur le statut des colonies ?",o:["Mandats puis tutelles préparant l'indépendance","Soutien direct à la colonisation","Aucun rôle","Annexion des colonies"],r:0},
+{l:"Causes de la décolonisation",q:"Quel facteur économique a affaibli les métropoles coloniales ?",o:["La ruine de la guerre et le coût des colonies","La hausse du pétrole","La crise de 1929 résolue","Le boom industriel"],r:0},
+{l:"Causes de la décolonisation",q:"Quelle défaite française en Indochine en 1954 accélère la décolonisation ?",o:["La défaite de Diên Biên Phu","La chute de Saïgon","La bataille d'Alger","La défaite de Sedan"],r:0},
+{l:"Causes de la décolonisation",q:"Quel pays musulman d'Afrique du Nord obtient son indépendance après une longue guerre (1954-1962) ?",o:["L'Algérie","Le Maroc","La Tunisie","La Libye"],r:0},
+/* =================== DÉCOLONISATION DU BURKINA FASO =================== */
+{l:"Décolonisation du Burkina Faso",q:"Quel nom portait le Burkina Faso sous la colonisation française ?",o:["La Haute-Volta","Le Soudan français","La Côte d'Ivoire","Le Niger"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quelle puissance européenne colonisait la Haute-Volta ?",o:["La France","Le Royaume-Uni","Le Portugal","L'Allemagne"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"En quelle année la Haute-Volta accède-t-elle à l'indépendance ?",o:["1960","1958","1947","1984"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Qui fut le premier président de la Haute-Volta indépendante ?",o:["Maurice Yaméogo","Sangoulé Lamizana","Thomas Sankara","Saye Zerbo"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quelle loi-cadre française de 1956 a préparé l'autonomie des colonies ?",o:["La loi Defferre","La loi Marshall","La loi Schuman","La loi Pleven"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quel statut la Haute-Volta acquiert-elle en 1958 ?",o:["République autonome dans la Communauté française","Indépendance totale","Protectorat","Département français"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quel parti dominait la vie politique voltaïque avant l'indépendance ?",o:["Le RDA (Rassemblement Démocratique Africain)","Le PAI","Le MNR","Le MPP"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quel référendum français de 1958 propose la Communauté aux territoires africains ?",o:["Le référendum sur la Constitution de la Ve République","Le référendum de 1962","Le référendum de Maastricht","Le référendum de 1969"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"À quelle date exacte la Haute-Volta proclame-t-elle son indépendance ?",o:["5 août 1960","11 décembre 1958","4 août 1984","15 octobre 1987"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quel chef religieux mossi joua un rôle politique notable pendant la transition ?",o:["Le Moogho Naaba","Le Lamido","L'Émir","Le Mansa"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"De quelle fédération coloniale française la Haute-Volta faisait-elle partie ?",o:["L'AOF (Afrique Occidentale Française)","L'AEF","L'Union française uniquement","Le Maghreb français"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quel territoire avait été partagé entre voisins en 1932 avant d'être reconstitué en 1947 ?",o:["La Haute-Volta","Le Soudan","Le Dahomey","Le Niger"],r:0},
+{l:"Décolonisation du Burkina Faso",q:"Quelle est la capitale historique du pays depuis la colonisation ?",o:["Ouagadougou","Bobo-Dioulasso","Koudougou","Banfora"],r:0},
+/* =================== BURKINA FASO 1960 À NOS JOURS =================== */
+{l:"Burkina Faso 1960 à nos jours",q:"Qui dirige la Haute-Volta de 1960 à 1966 ?",o:["Maurice Yaméogo","Sangoulé Lamizana","Saye Zerbo","Thomas Sankara"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Quel militaire prend le pouvoir le 3 janvier 1966 ?",o:["Sangoulé Lamizana","Saye Zerbo","Jean-Baptiste Ouédraogo","Thomas Sankara"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Qui prend le pouvoir le 4 août 1983 et lance la Révolution ?",o:["Thomas Sankara","Blaise Compaoré","Saye Zerbo","Jean-Baptiste Ouédraogo"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"En quelle année la Haute-Volta devient-elle le Burkina Faso ?",o:["1984","1983","1987","1991"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Que signifie « Burkina Faso » ?",o:["La patrie des hommes intègres","Le pays des fleuves","La terre rouge","La nation libre"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"En quelle année Thomas Sankara est-il assassiné ?",o:["1987","1983","1991","1989"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Qui succède à Thomas Sankara à la tête du pays ?",o:["Blaise Compaoré","Roch Kaboré","Saye Zerbo","Jean-Baptiste Ouédraogo"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Combien de temps Blaise Compaoré est-il resté au pouvoir ?",o:["27 ans (1987-2014)","10 ans","15 ans","35 ans"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Quelle insurrection populaire renverse Blaise Compaoré ?",o:["L'insurrection des 30 et 31 octobre 2014","Le coup d'État de 1987","La grève de 1966","Le putsch de 1980"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Qui est élu président en novembre 2015 ?",o:["Roch Marc Christian Kaboré","Michel Kafando","Yacouba Isaac Zida","Paul-Henri Damiba"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Qui dirige le coup d'État du 24 janvier 2022 ?",o:["Paul-Henri Sandaogo Damiba","Ibrahim Traoré","Gilbert Diendéré","Yacouba Zida"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Qui prend le pouvoir lors du coup d'État du 30 septembre 2022 ?",o:["Ibrahim Traoré","Paul-Henri Damiba","Roch Kaboré","Michel Kafando"],r:0},
+{l:"Burkina Faso 1960 à nos jours",q:"Quel défi sécuritaire majeur frappe le Burkina Faso depuis 2015 ?",o:["Le terrorisme djihadiste","La guerre civile ethnique","Une guerre avec la Côte d'Ivoire","Une invasion étrangère"],r:0},
+/* =================== PROBLÈMES DE L'AFRIQUE INDÉPENDANTE =================== */
+{l:"Problèmes de l'Afrique indépendante",q:"Quel problème politique frappe de nombreux pays africains depuis l'indépendance ?",o:["L'instabilité politique et les coups d'État","L'excès de démocratie","La sur-organisation administrative","L'absence totale de partis"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quel héritage colonial favorise les conflits ethniques en Afrique ?",o:["Les frontières artificielles tracées sans tenir compte des peuples","Les langues africaines","Les religions traditionnelles","Le climat tropical"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quelle organisation panafricaine a été créée en 1963 ?",o:["L'OUA","L'UA","La CEDEAO","La SADC"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quelle organisation a remplacé l'OUA en 2002 ?",o:["L'Union africaine (UA)","La CEDEAO","Le NEPAD","L'UEMOA"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quelle dépendance économique caractérise de nombreux pays africains ?",o:["La mono-exportation de matières premières","L'industrie de pointe","Les services financiers mondiaux","Le tourisme massif"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Comment appelle-t-on l'endettement excessif des pays africains depuis 1980 ?",o:["La crise de la dette","La crise pétrolière","La crise monétaire","La crise alimentaire"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quels plans imposés par le FMI/Banque mondiale dans les années 1980 ?",o:["Les Plans d'Ajustement Structurel (PAS)","Le plan Marshall","Le plan Schuman","Le plan Sankara"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quel fléau sanitaire majeur a frappé l'Afrique subsaharienne dès les années 1980 ?",o:["Le VIH/SIDA","La grippe espagnole","Le choléra mondial","La peste noire"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quel problème environnemental majeur touche le Sahel ?",o:["La désertification","Les inondations permanentes","Les éruptions volcaniques","Les tsunamis"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quel phénomène démographique caractérise l'Afrique contemporaine ?",o:["Une forte croissance démographique","Un déclin de la population","Une stagnation","Un vieillissement marqué"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quel génocide majeur frappe l'Afrique des Grands Lacs en 1994 ?",o:["Le génocide des Tutsi au Rwanda","Le génocide du Darfour","Le génocide du Biafra","Le génocide de Bosnie"],r:0},
+{l:"Problèmes de l'Afrique indépendante",q:"Quel terme désigne la fuite des cadres africains vers l'étranger ?",o:["La fuite des cerveaux","La diaspora","L'exode rural","La transhumance"],r:0},
+/* =================== LA CIVILISATION =================== */
+{l:"La civilisation",q:"Que désigne le mot « civilisation » au sens large ?",o:["Un ensemble de traits culturels, sociaux, techniques d'une société","Une religion","Une langue","Un État"],r:0},
+{l:"La civilisation",q:"De quelle langue vient le mot « civilisation » ?",o:["Du latin « civis » (citoyen)","Du grec « polis »","De l'arabe « madina »","De l'anglais « city »"],r:0},
+{l:"La civilisation",q:"Quel siècle a popularisé en Europe la notion moderne de civilisation ?",o:["Le XVIIIe siècle (Lumières)","Le XIIe siècle","Le XXe siècle","Le XVe siècle"],r:0},
+{l:"La civilisation",q:"Quel auteur a écrit « Le choc des civilisations » ?",o:["Samuel Huntington","Francis Fukuyama","Edward Said","Karl Marx"],r:0},
+{l:"La civilisation",q:"Quel élément distingue généralement civilisation et culture ?",o:["La civilisation englobe un ensemble plus vaste de cultures partagées","Aucune différence","La culture est plus vaste","La civilisation se limite à la religion"],r:0},
+{l:"La civilisation",q:"Quelles civilisations sont qualifiées d'« antiques » ?",o:["Égypte, Mésopotamie, Grèce, Rome","Aztèque, Inca, Maya","Empire britannique","Civilisation industrielle"],r:0},
+{l:"La civilisation",q:"Quel processus relie aujourd'hui les civilisations à l'échelle mondiale ?",o:["La mondialisation","La colonisation","La sédentarisation","La nomadisation"],r:0},
+{l:"La civilisation",q:"Quel facteur explique la diversité des civilisations ?",o:["L'environnement, l'histoire, les contacts entre peuples","L'unique facteur génétique","La météo seule","La langue uniquement"],r:0},
+{l:"La civilisation",q:"Comment évoluent les civilisations selon l'histoire ?",o:["Par naissance, apogée, déclin et transformations","Elles restent figées","Elles disparaissent toutes en 100 ans","Elles ne changent jamais"],r:0},
+{l:"La civilisation",q:"Quel terme désigne la rencontre et l'enrichissement mutuel des civilisations ?",o:["Le métissage culturel (ou acculturation)","L'isolement","La ségrégation","Le repli identitaire"],r:0},
+{l:"La civilisation",q:"Quel penseur africain a défendu l'apport des civilisations africaines à l'humanité ?",o:["Cheikh Anta Diop","Karl Popper","Hegel","Voltaire"],r:0},
+{l:"La civilisation",q:"Quelle invention est souvent considérée comme marquant l'entrée dans la civilisation ?",o:["L'écriture","L'imprimerie","Internet","Le téléphone"],r:0},
+{l:"La civilisation",q:"Quelle révolution néolithique a donné naissance aux premières civilisations ?",o:["L'invention de l'agriculture et de l'élevage","La révolution industrielle","La révolution numérique","La révolution française"],r:0},
+/* =================== CIVILISATIONS NÉGRO-AFRICAINES =================== */
+{l:"Civilisations négro-africaines",q:"Quelle civilisation antique du Soudan était voisine et rivale de l'Égypte ?",o:["Le royaume de Koush (Nubie)","Carthage","Axoum","Zimbabwe"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel royaume médiéval ouest-africain fut fondé vers le VIIIe siècle ?",o:["L'empire du Ghana","L'empire du Mali","L'empire Songhaï","Le royaume du Bénin"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel souverain malien célèbre fit le pèlerinage à La Mecque en 1324 ?",o:["Kankan Moussa (Mansa Moussa)","Soundiata Keïta","Askia Mohamed","Sonni Ali Ber"],r:0},
+{l:"Civilisations négro-africaines",q:"Qui est le fondateur légendaire de l'empire du Mali ?",o:["Soundiata Keïta","Mansa Moussa","Askia Mohamed","Sonni Ali Ber"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel empire succéda au Mali en Afrique de l'Ouest ?",o:["L'empire Songhaï","L'empire du Ghana","Le royaume du Bénin","Le royaume Kongo"],r:0},
+{l:"Civilisations négro-africaines",q:"Quelle ville fut un grand centre intellectuel et commercial des empires sahéliens ?",o:["Tombouctou","Le Caire","Marrakech","Lagos"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel royaume éthiopien chrétien rayonna dès le Ier siècle ap. J.-C. ?",o:["Le royaume d'Axoum","Le royaume du Ghana","Le royaume Kongo","Le royaume du Bénin"],r:0},
+{l:"Civilisations négro-africaines",q:"Quelle civilisation d'Afrique australe a laissé d'imposantes ruines en pierre ?",o:["Le Grand Zimbabwe","Le Bénin","Le Kanem-Bornou","Le Kongo"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel royaume du golfe de Guinée est célèbre pour ses bronzes ?",o:["Le royaume du Bénin","Le royaume Ashanti","Le royaume du Dahomey","Le royaume Yoruba uniquement"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel empire dominait le bassin du Tchad du IXe au XIXe siècle ?",o:["Le Kanem-Bornou","Le Mali","L'Axoum","Le Kongo"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel peuple du Burkina a fondé de puissants royaumes dès le XIIIe-XVe siècle ?",o:["Les Mossi","Les Peuls","Les Bobo","Les Sénoufo"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel titre porte le souverain mossi ?",o:["Moogho Naaba","Mansa","Askia","Oba"],r:0},
+{l:"Civilisations négro-africaines",q:"Quel commerce transsaharien a enrichi les empires ouest-africains ?",o:["Le commerce de l'or et du sel","Le commerce des épices","Le commerce du pétrole","Le commerce de l'acier"],r:0},
 ];
 
 const QUESTIONS_VF = [
@@ -1041,6 +1181,56 @@ const QUESTIONS_VF = [
 {l:"L'Europe",q:"L'Allemagne est le pays le plus peuplé et la première économie de l'UE.",r:"Vrai",e:"L'Allemagne concentre environ 80 millions d'habitants et produit le PIB le plus élevé de l'UE."},
 {l:"L'Europe",q:"L'espace Schengen permet la libre circulation des personnes sans contrôle aux frontières internes.",r:"Vrai",e:"L'espace Schengen regroupe 26 pays dont la plupart des membres de l'UE."},
 {l:"L'Europe",q:"Le Brexit désigne l'entrée du Royaume-Uni dans la zone euro.",r:"Faux",e:"Le Brexit désigne la sortie du Royaume-Uni de l'Union européenne, effective en 2020. Le RU n'a jamais adopté l'euro."},
+/* Seconde Guerre mondiale */
+{l:"Seconde Guerre mondiale",q:"La Seconde Guerre mondiale a débuté en 1939 avec l'invasion de la Pologne.",r:"Vrai",e:"Le 1er septembre 1939, l'Allemagne nazie envahit la Pologne ; la France et le Royaume-Uni déclarent la guerre le 3 septembre."},
+{l:"Seconde Guerre mondiale",q:"Les États-Unis sont entrés en guerre dès 1939.",r:"Faux",e:"Les États-Unis n'entrent en guerre qu'après l'attaque japonaise de Pearl Harbor, le 7 décembre 1941."},
+{l:"Seconde Guerre mondiale",q:"La conférence de Yalta (février 1945) a organisé le partage de l'Europe entre les Alliés.",r:"Vrai",e:"Roosevelt, Churchill et Staline y ont défini les zones d'influence et la suite de la guerre."},
+{l:"Seconde Guerre mondiale",q:"Hiroshima et Nagasaki ont été bombardées par l'URSS.",r:"Faux",e:"Les bombes atomiques ont été larguées par les États-Unis en août 1945."},
+/* ONU */
+{l:"ONU",q:"L'ONU a été créée en 1945 à San Francisco.",r:"Vrai",e:"La Charte des Nations Unies est signée à San Francisco le 26 juin 1945."},
+{l:"ONU",q:"Le siège principal de l'ONU se trouve à Genève.",r:"Faux",e:"Le siège principal de l'ONU est à New York. Genève accueille un siège secondaire."},
+{l:"ONU",q:"Le Conseil de sécurité compte 5 membres permanents disposant du droit de veto.",r:"Vrai",e:"USA, Russie, Chine, Royaume-Uni et France disposent du droit de veto."},
+{l:"ONU",q:"L'ONU est l'héritière directe de la Société des Nations (SDN).",r:"Vrai",e:"La SDN, créée après la 1ère GM, a échoué à empêcher la 2nde GM ; l'ONU la remplace en 1945."},
+/* Tensions idéologiques et conflits */
+{l:"Tensions idéologiques et conflits",q:"La Guerre froide a opposé les États-Unis et l'URSS sans affrontement militaire direct.",r:"Vrai",e:"C'était une guerre indirecte, idéologique, par alliés interposés, sans guerre frontale entre les deux blocs."},
+{l:"Tensions idéologiques et conflits",q:"Le mur de Berlin a été construit par les Américains.",r:"Faux",e:"Il a été érigé en 1961 par la RDA (Allemagne de l'Est, bloc soviétique) pour empêcher la fuite vers l'Ouest."},
+{l:"Tensions idéologiques et conflits",q:"La crise des missiles de Cuba (1962) a failli déclencher une guerre nucléaire.",r:"Vrai",e:"L'installation de missiles soviétiques à Cuba provoque une confrontation majeure résolue par un compromis."},
+{l:"Tensions idéologiques et conflits",q:"Le plan Marshall était une aide soviétique à l'Europe de l'Est.",r:"Faux",e:"Le plan Marshall (1947) est une aide économique américaine à l'Europe occidentale."},
+/* Fin de la bipolarisation */
+{l:"Fin de la bipolarisation",q:"L'URSS s'est officiellement dissoute en décembre 1991.",r:"Vrai",e:"Gorbatchev démissionne le 25 décembre 1991, marquant la fin officielle de l'URSS."},
+{l:"Fin de la bipolarisation",q:"Le mur de Berlin est tombé le 9 novembre 1989.",r:"Vrai",e:"La chute du mur marque symboliquement la fin de la division Est-Ouest."},
+{l:"Fin de la bipolarisation",q:"Après la fin de la Guerre froide, le monde est devenu multipolaire dès 1991.",r:"Faux",e:"Les années 1990 sont d'abord marquées par une hyperpuissance américaine ; la multipolarité s'affirme progressivement plus tard."},
+{l:"Fin de la bipolarisation",q:"La Perestroïka désignait la transparence politique en URSS.",r:"Faux",e:"La Perestroïka est la restructuration économique ; la Glasnost désigne la transparence."},
+/* Causes de la décolonisation */
+{l:"Causes de la décolonisation",q:"La conférence de Bandung en 1955 a marqué l'éveil des peuples colonisés.",r:"Vrai",e:"29 pays afro-asiatiques s'y sont réunis pour affirmer leur volonté d'indépendance et de non-alignement."},
+{l:"Causes de la décolonisation",q:"L'ONU a soutenu le principe du droit des peuples à disposer d'eux-mêmes.",r:"Vrai",e:"Ce principe figure dans la Charte de l'ONU et a soutenu les mouvements d'indépendance."},
+{l:"Causes de la décolonisation",q:"La défaite française de Diên Biên Phu en 1954 a accéléré la décolonisation.",r:"Vrai",e:"Cette défaite en Indochine a démontré la faiblesse des puissances coloniales et inspiré les mouvements de libération."},
+{l:"Causes de la décolonisation",q:"Les États-Unis ont toujours soutenu activement la colonisation européenne.",r:"Faux",e:"Les USA, anticolonialistes par tradition, ont plutôt favorisé les indépendances après 1945."},
+/* Décolonisation du Burkina Faso */
+{l:"Décolonisation du Burkina Faso",q:"La Haute-Volta accède à l'indépendance le 5 août 1960.",r:"Vrai",e:"L'indépendance est proclamée le 5 août 1960, sous la présidence de Maurice Yaméogo."},
+{l:"Décolonisation du Burkina Faso",q:"Maurice Yaméogo fut le premier président de la Haute-Volta indépendante.",r:"Vrai",e:"Il dirigea le pays de 1960 à 1966."},
+{l:"Décolonisation du Burkina Faso",q:"La Haute-Volta était une colonie britannique.",r:"Faux",e:"La Haute-Volta faisait partie de l'Afrique Occidentale Française (AOF), colonie de la France."},
+{l:"Décolonisation du Burkina Faso",q:"La loi-cadre Defferre de 1956 a préparé l'autonomie des colonies françaises.",r:"Vrai",e:"Cette loi a accordé une plus grande autonomie aux territoires d'outre-mer avant les indépendances."},
+/* Burkina Faso 1960 à nos jours */
+{l:"Burkina Faso 1960 à nos jours",q:"Thomas Sankara a renommé la Haute-Volta en Burkina Faso en 1984.",r:"Vrai",e:"Le 4 août 1984, le pays devient « Burkina Faso » signifiant « patrie des hommes intègres »."},
+{l:"Burkina Faso 1960 à nos jours",q:"Blaise Compaoré est resté au pouvoir pendant 27 ans.",r:"Vrai",e:"De 1987 à 2014, soit environ 27 ans, jusqu'à l'insurrection populaire."},
+{l:"Burkina Faso 1960 à nos jours",q:"L'insurrection populaire de 2014 a renversé Roch Kaboré.",r:"Faux",e:"L'insurrection de 2014 a renversé Blaise Compaoré. Roch Kaboré a été élu en 2015."},
+{l:"Burkina Faso 1960 à nos jours",q:"Ibrahim Traoré a pris le pouvoir lors du coup d'État du 30 septembre 2022.",r:"Vrai",e:"Le capitaine Ibrahim Traoré a renversé Paul-Henri Damiba le 30 septembre 2022."},
+/* Problèmes de l'Afrique indépendante */
+{l:"Problèmes de l'Afrique indépendante",q:"Les frontières héritées de la colonisation favorisent les conflits ethniques.",r:"Vrai",e:"Tracées sans tenir compte des peuples, elles divisent ou rassemblent arbitrairement des communautés."},
+{l:"Problèmes de l'Afrique indépendante",q:"L'OUA a été créée en 1963 et remplacée par l'Union africaine en 2002.",r:"Vrai",e:"L'OUA est devenue l'UA en 2002 lors du sommet de Durban."},
+{l:"Problèmes de l'Afrique indépendante",q:"L'Afrique connaît un déclin démographique depuis l'indépendance.",r:"Faux",e:"Au contraire, l'Afrique connaît une forte croissance démographique."},
+{l:"Problèmes de l'Afrique indépendante",q:"Le génocide des Tutsi au Rwanda a eu lieu en 1994.",r:"Vrai",e:"Environ 800 000 personnes ont été tuées entre avril et juillet 1994."},
+/* La civilisation */
+{l:"La civilisation",q:"Le mot « civilisation » vient du latin « civis » signifiant citoyen.",r:"Vrai",e:"« Civis » désigne le citoyen ; « civilis » ce qui relève de la cité organisée."},
+{l:"La civilisation",q:"Toutes les civilisations sont figées et ne changent jamais.",r:"Faux",e:"Les civilisations évoluent constamment : elles naissent, se transforment, déclinent ou fusionnent."},
+{l:"La civilisation",q:"L'invention de l'agriculture (Néolithique) a permis l'émergence des premières civilisations.",r:"Vrai",e:"La sédentarisation grâce à l'agriculture a permis l'apparition des villes et des États."},
+{l:"La civilisation",q:"Samuel Huntington est l'auteur du « Choc des civilisations ».",r:"Vrai",e:"Publié en 1996, cet essai analyse les tensions entre grandes aires culturelles mondiales."},
+/* Civilisations négro-africaines */
+{l:"Civilisations négro-africaines",q:"Mansa Moussa, empereur du Mali, a effectué un célèbre pèlerinage à La Mecque en 1324.",r:"Vrai",e:"Sa générosité en or au Caire fit chuter le cours du métal pendant des années."},
+{l:"Civilisations négro-africaines",q:"Tombouctou fut un grand centre intellectuel des empires sahéliens.",r:"Vrai",e:"Avec ses universités (Sankoré) et bibliothèques, Tombouctou rayonnait au Moyen Âge."},
+{l:"Civilisations négro-africaines",q:"Les Mossi n'ont jamais formé d'États organisés au Burkina Faso.",r:"Faux",e:"Les royaumes mossi (Ouagadougou, Yatenga, Tenkodogo) sont des États bien organisés depuis le XIIIe-XVe siècle."},
+{l:"Civilisations négro-africaines",q:"Le Grand Zimbabwe est une civilisation africaine ayant laissé d'imposantes ruines en pierre.",r:"Vrai",e:"Construit entre les XIe et XVe siècles, il témoigne d'une riche civilisation d'Afrique australe."},
 ];
 
 /* =====================================================================
@@ -1440,11 +1630,22 @@ init();
 
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-  const auth = getAuth(app); onAuthStateChanged(auth, (user) => {
-  if (user) {
+  const auth = getAuth(app);
+  let pendingDuel = false;
+  function showAuth() {
+    pendingDuel = true;
+    const el = document.getElementById("ecran-auth");
+    el.style.display = "flex";
+  }
+  function hideAuth() {
     document.getElementById("ecran-auth").style.display = "none";
   }
-});
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      hideAuth();
+      if (pendingDuel) { pendingDuel = false; creerDuel(); }
+    }
+  });
 const db = getFirestore(app);
   function genererToutesQuestions() {
   const qcm = QUESTIONS_QCM.map(x => ({...x, type:"qcm"}));
@@ -1533,10 +1734,28 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-login").addEventListener("click", showLogin);
   document.getElementById("btn-register").addEventListener("click", showRegister);
   document.getElementById("btn-submit").addEventListener("click", submitAuth);
-  document.getElementById("btn-duel").addEventListener("click", creerDuel);
+  document.getElementById("btn-close-auth").addEventListener("click", () => { pendingDuel = false; hideAuth(); });
+  document.getElementById("btn-duel").addEventListener("click", () => {
+    if (auth.currentUser) {
+      creerDuel();
+    } else {
+      showAuth();
+    }
+  });
   document.getElementById("btn-copier-lien").addEventListener("click", copierLienDuel);
+  document.getElementById("btn-annuler-duel").addEventListener("click", () => {
+    document.getElementById("screen-duel-attente").style.display = "none";
+    document.getElementById("screen-home").style.display = "";
+  });
+
+  // Bouton musique
+  const mt = document.getElementById("music-toggle");
+  if (mt && window._audio) {
+    mt.addEventListener("click", () => {
+      window._audio.toggleMusic();
+    });
+  }
 });
 </script>
 </body>
 </html>
-
