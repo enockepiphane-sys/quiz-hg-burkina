@@ -1620,6 +1620,20 @@ const db = getFirestore(app);
   return [...qcm, ...vf];
 }
 
+function demarrerDuel(questions) {
+  document.getElementById("screen-duel-attente").style.display = "none";
+  document.getElementById("screen-home").style.display = "none";
+  document.getElementById("screen-result").style.display = "none";
+  sessionQuestions = questions;
+  currentIndex = 0;
+  score = 0;
+  passees = 0;
+  resultByLecon = {};
+  document.getElementById("screen-quiz").style.display = "block";
+  startTimer();
+  showQuestion();
+}
+
 async function creerDuel() {
   if (!auth.currentUser) {
     alert("Tu dois être connecté pour lancer un duel.");
@@ -1653,10 +1667,11 @@ async function creerDuel() {
   const codeEl = document.getElementById("duel-code");
   if (codeEl) codeEl.textContent = duelId.toUpperCase();
 
-  onSnapshot(doc(db, "duels", duelId), (snap) => {
+  const unsubCreateur = onSnapshot(doc(db, "duels", duelId), (snap) => {
     const data = snap.data();
     if (data && data.statut === "en_cours") {
-      console.log("Le duel commence !", data);
+      unsubCreateur();
+      demarrerDuel(data.questions);
     }
   });
 }
@@ -1703,11 +1718,7 @@ async function rejoindreDuel(duelIdInput) {
     [`reponses.${auth.currentUser.uid}`]: 0,
     statut: "en_cours"
   });
-  alert("Duel rejoint ! En attente du démarrage des questions...");
-  document.getElementById("screen-home").style.display = "none";
-  document.getElementById("screen-duel-attente").style.display = "block";
-  document.getElementById("duel-code").textContent = duelId.toUpperCase();
-  document.getElementById("duel-lien").value = window.location.origin + window.location.pathname + "?duel=" + duelId;
+  demarrerDuel(snap.data().questions);
 }
 
   let modeAuth = "inscription";
