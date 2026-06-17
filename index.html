@@ -3,7 +3,7 @@
 <link rel="manifest" href="/quiz-hg-burkina/manifest.json">
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"/>
-<title>Questionnaire Histoire-Géographie – Terminale A & D</title>F
+<title>Questionnaire Histoire-Géographie – Terminale A & D</title>
 <style>@keyframes cfall {
   0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
@@ -44,7 +44,7 @@
   <style>
   <script>
 (function() {
-  let audioCtx, musicOn = true, melodyTimer = null, melodyIdx = 0;
+  let audioCtx, musicOn = false, melodyTimer = null, melodyIdx = 0;
   const MELODY = [523,659,784,659,523,392,440,523,659,784,880,784,659,523,587,659];
 
   function getCtx() {
@@ -190,8 +190,7 @@
     });
   }).observe(document.body, { childList: true, subtree: true });
 
-  // Démarrer musique au premier clic
-  document.addEventListener('click', () => { if (musicOn) startMusic(); }, { once: true });
+  // Musique démarre uniquement quand l'utilisateur clique sur le bouton 🎵
 })();
 </script>
   }
@@ -691,9 +690,9 @@
     <div class="header-main-inner">
       <div class="header-texts-center">
         <div class="header-country-line">BURKINA FASO — ÉDUCATION NATIONALE</div>
-        <div class="header-title">Questionnaire d'Histoire-Géographie Terminale A</div>
+        <div class="header-title">Questionnaire d'Histoire-Géographie Terminale A &amp; D</div>
         <div class="header-subtitle">
-          126 QCM<span class="sep">·</span>42 Vrai ou Faux<span class="sep">·</span>168 questions au total<span class="sep">·</span>Mélange aléatoire
+          334 QCM et Vrai ou Faux<span class="sep">·</span>Mélange aléatoire
         </div>
       </div>
       <div class="header-flag-right">
@@ -712,7 +711,7 @@
 <div id="screen-home">
   <div class="stat-home-grid">
     <div class="stat-home-card">
-      <div><div class="stat-val">168</div><div class="stat-lbl">Questions totales</div></div>
+      <div><div class="stat-val">334</div><div class="stat-lbl">Questions totales</div></div>
     </div>
     
     <div class="stat-home-card">
@@ -753,24 +752,35 @@
   <div class="card">
     <h2>Leçons à inclure</h2>
     <p>Coche les thèmes souhaités (au moins un).</p>
-    <div class="lecon-grid" id="lecon-grid">
-      <!-- rempli par JS -->
-    </div>
+    <h3 style="margin-top:10px;color:var(--vert);">🌍 Géographie</h3>
+    <div class="lecon-grid" id="lecon-grid-geo"></div>
+    <h3 style="margin-top:18px;color:var(--rouge);">📜 Histoire</h3>
+    <div class="lecon-grid" id="lecon-grid-hist"></div>
   </div>
 
   <div class="card">
     <h2>Nombre de questions</h2>
     <div class="count-row">
       <label>Nombre :</label>
-      <input class="count-input" type="number" id="nb-questions" value="30" min="5" max="168"/>
-      <span style="font-size:0.80rem;color:var(--gris-texte);">max 168 (126 QCM + 42 VF)</span>
+      <input class="count-input" type="number" id="nb-questions" value="30" min="5" max="334"/>
+      <span style="font-size:0.80rem;color:var(--gris-texte);">max 334</span>
     </div>
     <button class="btn-start" onclick="startQuiz()">✖ Mélanger &amp; Commencer</button>
   </div>
 <div class="card">
   <h2>Mode Duel</h2>
   <p>Affronte un adversaire en temps réel sur les mêmes questions !</p>
- <button class="btn-start"  id="btn-duel" style="background:linear-gradient(135deg,#b36200,#f97316);">⚔️ lancer un duel</button>
+<div class="card">
+  <h2>Mode Duel</h2>
+  <p>Affronte un adversaire en temps réel sur les mêmes questions !</p>
+ <button class="btn-start"  id="btn-duel" style="background:linear-gradient(135deg,#b36200,#f97316);">⚔️ Lancer un duel</button>
+ <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--gris-moyen);">
+   <p style="margin-bottom:8px;">Tu as reçu un lien ou un code de duel ? Colle-le ici pour rejoindre :</p>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;">
+     <input id="duel-join-input" type="text" placeholder="Colle le lien ou le code du duel" style="flex:1;min-width:200px;padding:10px;border-radius:8px;border:1px solid #ccc;">
+     <button class="btn-start" id="btn-rejoindre-duel" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);flex:0 0 auto;">🎯 Rejoindre</button>
+   </div>
+ </div>
 </div>
  <div class="signature">Questionnaire conçu et produit — <strong>PAR SAOUADOGO W E EPIPHANE</strong></div>
   <div class="app-date">Application créée en 06/2026</div>
@@ -779,10 +789,15 @@
 <!-- ============================================================ ÉCRAN DUEL ATTENTE -->
 <div id="screen-duel-attente" style="display:none;text-align:center;padding:30px;max-width:600px;margin:0 auto;">
   <h2>⚔️ Duel créé !</h2>
-  <p>Partage ce lien à ton adversaire :</p>
+  <p>Partage ce <strong>code</strong> ou ce <strong>lien</strong> à ton adversaire. Il pourra le coller dans le champ « Rejoindre » sur sa page d'accueil.</p>
+  <div style="margin:14px 0;">
+    <div style="font-size:0.85rem;color:#888;">Code du duel</div>
+    <div id="duel-code" style="font-size:2rem;font-weight:bold;letter-spacing:4px;color:#f5a623;">------</div>
+  </div>
   <input id="duel-lien" type="text" readonly style="width:90%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;">
   <br>
   <button id="btn-copier-lien" style="padding:12px 20px;background:#f5a623;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">📋 Copier le lien</button>
+  <button id="btn-copier-code" style="padding:12px 20px;background:#2563eb;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-left:6px;">🔑 Copier le code</button>
   <p style="color:#888;margin-top:20px;">⏳ En attente de l'adversaire...</p>
   <button id="btn-annuler-duel" style="margin-top:10px;padding:10px 18px;background:#444;color:#fff;border:none;border-radius:8px;cursor:pointer;">← Retour à l'accueil</button>
 </div>
@@ -862,10 +877,12 @@
 <script>
 /* =====================================================================
    BASE DE QUESTIONS
-   126 QCM + 42 Vrai/Faux  — mélange aléatoire à l'exécution
+   334 QCM et Vrai/Faux  — mélange aléatoire à l'exécution
    ===================================================================== */
 
-const LECONS = ["États-Unis","Secteur tertiaire","Secteur secondaire","Secteur primaire","Chine","Nigeria","Burkina Faso","L'Europe","Seconde Guerre mondiale","ONU","Tensions idéologiques et conflits","Fin de la bipolarisation","Causes de la décolonisation","Décolonisation du Burkina Faso","Burkina Faso 1960 à nos jours","Problèmes de l'Afrique indépendante","La civilisation","Civilisations négro-africaines"];
+const LECONS_GEO = ["États-Unis","Secteur tertiaire","Secteur secondaire","Secteur primaire","Chine","Nigeria","Burkina Faso","L'Europe"];
+const LECONS_HIST = ["Seconde Guerre mondiale","ONU","Tensions idéologiques et conflits","Fin de la bipolarisation","Causes de la décolonisation","Décolonisation du Burkina Faso","Burkina Faso 1960 à nos jours","Problèmes de l'Afrique indépendante","La civilisation","Civilisations négro-africaines"];
+const LECONS = [...LECONS_GEO, ...LECONS_HIST];
 
 const QUESTIONS_QCM = [
 /* =================== ÉTATS-UNIS =================== */
@@ -1254,17 +1271,20 @@ const leconChecks = {};
    INITIALISATION
    ===================================================================== */
 function init() {
-  const grid = document.getElementById('lecon-grid');
-  LECONS.forEach(l => {
+  const gridGeo = document.getElementById('lecon-grid-geo');
+  const gridHist = document.getElementById('lecon-grid-hist');
+  function addLecon(grid, l) {
     const wrap = document.createElement('label');
     wrap.className = 'lecon-check';
     const cb = document.createElement('input');
     cb.type = 'checkbox'; cb.checked = true;
     leconChecks[l] = cb;
     wrap.appendChild(cb);
-    wrap.appendChild(document.createTextNode(l));
+    wrap.appendChild(document.createTextNode(' ' + l));
     grid.appendChild(wrap);
-  });
+  }
+  LECONS_GEO.forEach(l => addLecon(gridGeo, l));
+  LECONS_HIST.forEach(l => addLecon(gridHist, l));
 }
 
 function selectMode(btn) {
@@ -1544,7 +1564,7 @@ async function copyPerformance() {
   const tps  = document.getElementById('res-time').textContent;
   const ment = document.getElementById('res-mention').textContent;
   const text =
-`📊 MA PERFORMANCE — Questionnaire HG Terminale A
+`📊 MA PERFORMANCE — Questionnaire HG Terminale A & D
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🏆 Score : ${pct}  ${ment}
 📝 ${det}
@@ -1643,7 +1663,14 @@ init();
   onAuthStateChanged(auth, (user) => {
     if (user) {
       hideAuth();
-      if (pendingDuel) { pendingDuel = false; creerDuel(); }
+      const pendingJoin = sessionStorage.getItem("pendingJoinDuel");
+      if (pendingJoin) {
+        sessionStorage.removeItem("pendingJoinDuel");
+        rejoindreDuel(pendingJoin);
+      } else if (pendingDuel) {
+        pendingDuel = false;
+        creerDuel();
+      }
     }
   });
 const db = getFirestore(app);
@@ -1677,6 +1704,8 @@ async function creerDuel() {
   document.getElementById("screen-home").style.display = "none";
   document.getElementById("screen-duel-attente").style.display = "block";
   document.getElementById("duel-lien").value = lien;
+  const codeEl = document.getElementById("duel-code");
+  if (codeEl) codeEl.textContent = duelId.toUpperCase();
 
   onSnapshot(doc(db, "duels", duelId), (snap) => {
     const data = snap.data();
@@ -1690,6 +1719,51 @@ function copierLienDuel() {
   const input = document.getElementById("duel-lien");
   navigator.clipboard.writeText(input.value).then(() => alert("Lien copié !"));
 }
+function copierCodeDuel() {
+  const code = document.getElementById("duel-code").textContent.trim();
+  navigator.clipboard.writeText(code).then(() => alert("Code copié : " + code));
+}
+
+// Extrait l'ID du duel à partir d'un lien complet ou d'un code brut
+function extraireDuelId(raw) {
+  if (!raw) return null;
+  raw = raw.trim();
+  try {
+    const url = new URL(raw);
+    const p = url.searchParams.get("duel");
+    if (p) return p.toLowerCase();
+  } catch(_) { /* pas une URL */ }
+  // sinon on garde uniquement les caractères alphanumériques
+  const code = raw.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+  return code || null;
+}
+
+async function rejoindreDuel(duelIdInput) {
+  const duelId = extraireDuelId(duelIdInput);
+  if (!duelId) { alert("Code ou lien de duel invalide."); return; }
+  if (!auth.currentUser) {
+    pendingDuel = false;
+    sessionStorage.setItem("pendingJoinDuel", duelId);
+    showAuth();
+    return;
+  }
+  const ref = doc(db, "duels", duelId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) { alert("Aucun duel trouvé pour ce code."); return; }
+  const pseudo = auth.currentUser.email.split('@')[0];
+  await updateDoc(ref, {
+    adversaire: { uid: auth.currentUser.uid, pseudo: pseudo },
+    [`scores.${auth.currentUser.uid}`]: 0,
+    [`reponses.${auth.currentUser.uid}`]: 0,
+    statut: "en_cours"
+  });
+  alert("Duel rejoint ! En attente du démarrage des questions...");
+  document.getElementById("screen-home").style.display = "none";
+  document.getElementById("screen-duel-attente").style.display = "block";
+  document.getElementById("duel-code").textContent = duelId.toUpperCase();
+  document.getElementById("duel-lien").value = window.location.origin + window.location.pathname + "?duel=" + duelId;
+}
+
   let modeAuth = "inscription";
 
   function showLogin() {
@@ -1743,10 +1817,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   document.getElementById("btn-copier-lien").addEventListener("click", copierLienDuel);
+  const btnCC = document.getElementById("btn-copier-code");
+  if (btnCC) btnCC.addEventListener("click", copierCodeDuel);
+  const btnRejoindre = document.getElementById("btn-rejoindre-duel");
+  if (btnRejoindre) {
+    btnRejoindre.addEventListener("click", () => {
+      const val = document.getElementById("duel-join-input").value;
+      rejoindreDuel(val);
+    });
+  }
   document.getElementById("btn-annuler-duel").addEventListener("click", () => {
     document.getElementById("screen-duel-attente").style.display = "none";
     document.getElementById("screen-home").style.display = "";
   });
+
+  // Auto-rejoindre si ?duel=XXX dans l'URL
+  const urlDuel = new URLSearchParams(window.location.search).get("duel");
+  if (urlDuel) {
+    const joinField = document.getElementById("duel-join-input");
+    if (joinField) joinField.value = urlDuel;
+    // L'utilisateur clique sur Rejoindre (ou on tente direct si déjà connecté)
+    if (auth.currentUser) {
+      rejoindreDuel(urlDuel);
+    } else {
+      sessionStorage.setItem("pendingJoinDuel", urlDuel);
+      showAuth();
+    }
+  }
 
   // Bouton musique
   const mt = document.getElementById("music-toggle");
